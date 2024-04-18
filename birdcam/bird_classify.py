@@ -32,6 +32,7 @@ import argparse
 import time
 import logging
 import threading
+import datetime
 from PIL import Image
 
 from pycoral.utils.dataset import read_label_file
@@ -144,6 +145,8 @@ def main():
         nonlocal last_results
         nonlocal visitors
         nonlocal timer
+        current_time = datetime.datetime.now()
+        formatted_time = current_time.strftime("%m/%d/%Y %H:%M:%S")
         start_time = time.monotonic()
         common.set_resized_input(
             interpreter, image.size,
@@ -173,6 +176,7 @@ def main():
                     # so we don't keep taking the same image
                     if visitor not in visitors:
                         print("Visitor: ", visitor)
+                        print("Visited at: ", formatted_time)
                         save_data(image,  visitor, storage_dir)
                         visitors.append(visitor)
 
