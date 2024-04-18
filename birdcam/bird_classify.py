@@ -176,6 +176,7 @@ def main():
                     # so we don't keep taking the same image
                     if visitor not in visitors:
                         print("Visitor: ", visitor)
+                        print("Score: ", results[0][1])
                         print("Visited at: ", formatted_time)
                         save_data(image,  visitor, storage_dir)
                         visitors.append(visitor)
