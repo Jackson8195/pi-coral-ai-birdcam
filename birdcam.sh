@@ -30,6 +30,6 @@ python3 bird_classify.py \
 	--model models/mobilenet_v2_1.0_224_inat_bird_quant_edgetpu.tflite \
 	--labels models/inat_bird_labels.txt \
 	--top_k 1 \
-	--threshold 0.4 \
+	--threshold 0.85 \
 	--storage "$tmp_dir" \
 	--visit_interval 10  # Interval between bird visits in seconds
