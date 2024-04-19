@@ -41,6 +41,9 @@ from pycoral.adapters import common
 from pycoral.adapters.classify import get_classes
 
 import gstreamer
+import mongodb
+
+mongodb.mongoDB_connect()
 
 
 def save_data(image, results, path, ext='png'):
