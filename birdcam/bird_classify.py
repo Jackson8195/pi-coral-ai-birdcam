@@ -43,6 +43,7 @@ from pycoral.adapters.classify import get_classes
 import gstreamer
 import mongodb
 
+#connect to and ping the Mongo DB
 mongodb.mongoDB_connect()
 
 
@@ -193,5 +194,6 @@ def main():
 if __name__ == '__main__':
     # Add to this list for false positives for your camera
     EXCLUSIONS = ['background',
-                 'Branta canadensis (Canada Goose)']
+                 'Branta canadensis (Canada Goose)',
+                 "Cyanocitta stelleri (Steller's Jay)"]
     main()
