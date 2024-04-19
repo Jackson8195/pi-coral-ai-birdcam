@@ -22,6 +22,9 @@
 # Create a temp subdir in /tmp to store bird images and logs
 tmp_dir=$(mktemp -d -t "birdcam-$(date +%Y-%m-%d)-XXXXXXXXXX")
 
+# Source the ~/.bash_profile to set environment variables (MongoDB password stored in ~/.bash_profile)
+source ~/.bash_profile
+
 echo "$tmp_dir"
 
 cd birdcam || exit
