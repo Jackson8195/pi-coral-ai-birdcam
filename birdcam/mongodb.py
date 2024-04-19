@@ -21,3 +21,10 @@ def mongoDB_connect():
         print(e)
 
 mongoDB_connect()
+
+db = client["Birds"]
+collection = db["BirdVisitors"]
+
+def mongo_insert(visitor, score, date):
+    new_record = {"Bird:": visitor, "Score": score, "Date": date}
+    collection.insert_one(new_record)

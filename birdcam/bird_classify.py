@@ -182,6 +182,7 @@ def main():
                         print("Score: ", results[0][1])
                         print("Visited at: ", formatted_time)
                         save_data(image,  visitor, storage_dir)
+                        mongodb.mongo_insert(visitor, results[0][1], formatted_time)
                         visitors.append(visitor)
 
         last_results = results
