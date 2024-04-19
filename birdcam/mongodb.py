@@ -3,7 +3,7 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
 # Get the password from the environment variable
-mongodb_password = os.environ['MONGODB_PASSWORD']
+mongodb_password = os.environ["MONGODB_PASSWORD"]
 
 # Construct the URI with the password
 uri = "mongodb+srv://jackson8:{}@birdcam.tpshz91.mongodb.net/?retryWrites=true&w=majority&appName=BirdCam".format(mongodb_password)
