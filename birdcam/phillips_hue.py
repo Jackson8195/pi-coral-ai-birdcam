@@ -36,6 +36,7 @@ for scene_id, scene_info in scenes.items():
     print()
 
 countertop_lights = b.get_light('Countertop Lights')
+print(countertop_lights)
 office_light1 = ['Office Fan 1']
 
 def setLights(bird, lights):
@@ -51,11 +52,11 @@ def setLights(bird, lights):
             lights_state = "bird_detect"
         else:
             if lights_state != 'no_bird_detect':
-                b.run_scene('Office','Concentrate',4)
+                b.run_scene('Kitchen','Concentrate',4)
                 print('Setting lights back to Concentrate')
                 lights_state = 'no_bird_detect'
     except Exception as e:
         print("An error occurred while setting lights:", e)
 
 #Test setting lights function
-#setLights('Cyanocitta cristata (Blue Jay)', office_light1)
+setLights('Cyanocitta cristata (Blue Jay)', countertop_lights)
