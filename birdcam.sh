@@ -36,7 +36,7 @@ source ~/.bash_profile
 
 echo "$tmp_dir"
 
-cd birdcam || exit
+cd /home/pi/pi-coral-ai-birdcam/birdcam || exit
 
 # Run bird_classify.py in the background and store its process ID
 python3 bird_classify.py \
