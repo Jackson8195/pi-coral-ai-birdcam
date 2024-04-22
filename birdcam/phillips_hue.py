@@ -45,13 +45,10 @@ def setLights(bird, lights):
             b.set_light(lights, {'hue': 0, 'sat': 255, 'bri': 255})
             print('Setting lights to Red for Cardinal')
             lights_state = "bird_detect"
-            # Use threading.Timer for non-blocking delay
-            threading.Timer(2).start()
         elif bird == 'Cyanocitta cristata (Blue Jay)':
             b.set_light(lights, {'hue': 45000, 'sat': 255, 'bri': 255})
             print('Setting lights to Blue for Blue Jay')
             lights_state = "bird_detect"
-            threading.Timer(2).start()
         else:
             if lights_state != 'no_bird_detect':
                 b.run_scene('Office','Concentrate',4)
@@ -61,4 +58,4 @@ def setLights(bird, lights):
         print("An error occurred while setting lights:", e)
 
 #Test setting lights function
-setLights('Cyanocitta cristata (Blue Jay)', office_light1)
+#setLights('Cyanocitta cristata (Blue Jay)', office_light1)
