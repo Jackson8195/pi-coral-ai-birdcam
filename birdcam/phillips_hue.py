@@ -10,34 +10,7 @@ b.connect()
 # Get the bridge state (This returns the full dictionary that you can explore)
 bridge_state = b.get_api()
 
-# Get a dictionary with the light name as the key
-light_names = b.get_light_objects('name')
-print(light_names)
-
-# Get all groups configured on the bridge
-groups = b.get_group()
-
-print("Groups on the bridge:")
-for group_id, group_info in groups.items():
-    print("Group ID:", group_id)
-    print("Group Name:", group_info['name'])
-    print("Group Type:", group_info['type'])
-    print("Group Lights:", group_info['lights'])
-    print()
-
-# Get all scenes configured on the bridge
-scenes = b.get_scene()
-
-print("Scenes on the bridge:")
-for scene_id, scene_info in scenes.items():
-    print("Scene ID:", scene_id)
-    print("Scene Name:", scene_info['name'])
-    print("Scene Lights:", scene_info['lights'])
-    print()
-
 countertop_lights = b.get_light('Countertop Lights')
-print(countertop_lights)
-office_light1 = ['Office Fan 1']
 
 def setLights(bird, lights):
     global lights_state
@@ -58,5 +31,27 @@ def setLights(bird, lights):
     except Exception as e:
         print("An error occurred while setting lights:", e)
 
-#Test setting lights function
-setLights('Cyanocitta cristata (Blue Jay)', countertop_lights)
+if __name__ == "__main__":
+    # Get a dictionary with the light name as the key
+    light_names = b.get_light_objects('name')
+    print(light_names)
+    # Get all scenes configured on the bridge
+    scenes = b.get_scene()
+    print("Scenes on the bridge:")
+    for scene_id, scene_info in scenes.items():
+        print("Scene ID:", scene_id)
+        print("Scene Name:", scene_info['name'])
+        print("Scene Lights:", scene_info['lights'])
+        print()
+    # Get all groups configured on the bridge
+    groups = b.get_group()
+    print("Groups on the bridge:")
+    for group_id, group_info in groups.items():
+        print("Group ID:", group_id)
+        print("Group Name:", group_info['name'])
+        print("Group Type:", group_info['type'])
+        print("Group Lights:", group_info['lights'])
+        print()
+    #Test setting lights function
+    setLights('Cyanocitta cristata (Blue Jay)', countertop_lights)
+    pass
