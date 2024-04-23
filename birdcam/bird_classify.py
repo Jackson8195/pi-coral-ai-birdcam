@@ -171,6 +171,7 @@ def main():
             # Custom model mode:
             if len(results):
                 visitor = results[0][0]
+                '''
                 #set countertop lights to bird color
                 b = phillips_hue.Bridge('192.168.0.156')
                 countertop_lights = b.get_light('Countertop Lights')
@@ -178,7 +179,7 @@ def main():
                     phillips_hue.setLights(visitor, countertop_lights)
                 except:
                     print("Failed to set lights, but the main script continues to run.")
-
+                '''
                 if visitor not in EXCLUSIONS:
                     # If visit interval has past, clear visitors list
                     if timer:
