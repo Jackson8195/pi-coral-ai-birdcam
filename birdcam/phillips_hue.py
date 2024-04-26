@@ -17,12 +17,12 @@ def setLights(bird, lights):
             b.set_light(lights, {'hue': 0, 'sat': 255, 'bri': 255})
             print('Setting lights to Red for Cardinal')
             lights_state = "bird_detect"
-            threading.Timer(2)
+            threading.Timer(2, setLights, args=(bird, lights)).start()
         elif bird == 'Cyanocitta cristata (Blue Jay)':
             b.set_light(lights, {'hue': 45000, 'sat': 255, 'bri': 255})
             print('Setting lights to Blue for Blue Jay')
             lights_state = "bird_detect"
-            threading.Timer(2)
+            threading.Timer(2, setLights, args=(bird, lights)).start()
         else:
             if lights_state != 'no_bird_detect':
                 b.run_scene('Kitchen','Concentrate',4)
