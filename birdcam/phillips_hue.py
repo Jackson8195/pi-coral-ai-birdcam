@@ -12,24 +12,30 @@ bridge_state = b.get_api()
 
 def setLights(bird, lights):
     lights_state = 'no_bird_detect'
-    try:
-        if bird == 'Cardinalis cardinalis (Northern Cardinal)':
-            b.set_light(lights, {'hue': 0, 'sat': 255, 'bri': 255})
-            print('Setting lights to Red for Cardinal')
-            lights_state = "bird_detect"
-            threading.Timer(2, setLights, args=(bird, lights)).start()
-        elif bird == 'Cyanocitta cristata (Blue Jay)':
-            b.set_light(lights, {'hue': 45000, 'sat': 255, 'bri': 255})
-            print('Setting lights to Blue for Blue Jay')
-            lights_state = "bird_detect"
-            threading.Timer(2, setLights, args=(bird, lights)).start()
-        else:
-            if lights_state != 'no_bird_detect':
-                b.run_scene('Kitchen','Concentrate',4)
-                print('Setting lights back to Concentrate')
-                lights_state = 'no_bird_detect'
-    except Exception as e:
-        print("An error occurred while setting lights:", e)
+    def callback():
+        nonlocal lights_state # Use nonlocal to modify the outer lights_state variable
+        try:
+            if bird == 'Cardinalis cardinalis (Northern Cardinal)':
+                b.set_light(lights, {'hue': 0, 'sat': 255, 'bri': 255})
+                print('Setting lights to Red for Cardinal')
+                lights_state = "bird_detect"
+            elif bird == 'Cyanocitta cristata (Blue Jay)':
+                b.set_light(lights, {'hue': 45000, 'sat': 255, 'bri': 255})
+                print('Setting lights to Blue for Blue Jay')
+                lights_state = "bird_detect"
+            else:
+                if lights_state != 'no_bird_detect':
+                    b.run_scene('Kitchen','Concentrate',4)
+                    print('Setting lights back to Concentrate')
+                    lights_state = 'no_bird_detect'
+        except Exception as e:
+            print("An error occurred while setting lights:", e)
+
+    global hueTimer
+
+    if not hueTimer or not hueTimer.is_alive():
+        hueTimer = threading.Timer(2, callback)
+        hueTimer.start()
 
 if __name__ == "__main__":
     # Get a dictionary with the light name as the key
