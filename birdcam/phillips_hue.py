@@ -11,7 +11,7 @@ b.connect()
 bridge_state = b.get_api()
 
 def setLights(bird, lights):
-    global lights_state
+    lights_state = 'no_bird_detect'
     try:
         if bird == 'Cardinalis cardinalis (Northern Cardinal)':
             b.set_light(lights, {'hue': 0, 'sat': 255, 'bri': 255})
