@@ -10,8 +10,6 @@ b.connect()
 # Get the bridge state (This returns the full dictionary that you can explore)
 bridge_state = b.get_api()
 
-countertop_lights = b.get_light('Countertop Lights')
-
 def setLights(bird, lights):
     global lights_state
     try:
@@ -19,10 +17,12 @@ def setLights(bird, lights):
             b.set_light(lights, {'hue': 0, 'sat': 255, 'bri': 255})
             print('Setting lights to Red for Cardinal')
             lights_state = "bird_detect"
+            threading.Timer(2)
         elif bird == 'Cyanocitta cristata (Blue Jay)':
             b.set_light(lights, {'hue': 45000, 'sat': 255, 'bri': 255})
             print('Setting lights to Blue for Blue Jay')
             lights_state = "bird_detect"
+            threading.Timer(2)
         else:
             if lights_state != 'no_bird_detect':
                 b.run_scene('Kitchen','Concentrate',4)
@@ -53,5 +53,5 @@ if __name__ == "__main__":
         print("Group Lights:", group_info['lights'])
         print()
     #Test setting lights function
-    setLights('Cyanocitta cristata (Blue Jay)', countertop_lights)
+    setLights('Cyanocitta cristata (Blue Jay)', 'Countertop Lights')
     pass
