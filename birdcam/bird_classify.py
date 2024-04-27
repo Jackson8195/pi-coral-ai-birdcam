@@ -179,7 +179,7 @@ def main():
             if len(results):
                 visitor = results[0][0]
                 #set countertop lights to bird color
-                phillips_hue.setLights(visitor, 'Countertop Lights', hueTimer)
+                phillips_hue.setLights('Cyanocitta cristata (Blue Jay)', 'Countertop Lights', hueTimer)
                 
                 if visitor not in EXCLUSIONS:
                     # If visit interval has past, clear visitors list
