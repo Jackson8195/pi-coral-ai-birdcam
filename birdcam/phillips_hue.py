@@ -17,11 +17,10 @@ hue_birds = [
     ['Cyanocitta cristata (Blue Jay)', 45000, 255, 255]
 ]
 
-hueTimer2 = False
 
 def setLights(bird, lights):
+    hueTimer2 = False
     def hue_timed_event2():
-        global hueTimer2
         hueTimer2 = True
         threading.Timer(3, hue_timed_event2).start()
     hue_timed_event2()
