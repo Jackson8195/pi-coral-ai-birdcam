@@ -24,6 +24,7 @@ def setLights(bird, lights):
         global hueTimer2
         hueTimer2 = True
         threading.Timer(3, hue_timed_event2).start()
+    hue_timed_event2()
     global hue_birds
     global hueTimer
     try:
