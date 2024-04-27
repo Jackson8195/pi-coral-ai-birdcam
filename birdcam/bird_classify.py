@@ -182,7 +182,7 @@ def main():
                 
                 if visitor not in EXCLUSIONS:
                     #set countertop lights to bird color
-                    phillips_hue.setLights(visitor, 'Countertop Lights')
+                    #phillips_hue.setLights(visitor, 'Countertop Lights')
                     # If visit interval has past, clear visitors list
                     if timer:
                         print("next visit...")
