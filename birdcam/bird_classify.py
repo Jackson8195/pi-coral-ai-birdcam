@@ -134,16 +134,24 @@ def main():
     last_time = time.monotonic()
     last_results = [('label', 0)]
     visitors = []
+    hue_visitors = []
 
     DURATION = args.visit_interval
     timer = False
+    hueTimer = False
 
     def timed_event():
         nonlocal timer
         timer = True
         threading.Timer(DURATION, timed_event).start()
 
+    def hue_timed_event():
+        nonlocal hueTimer
+        hueTimer = True
+        threading.Timer(2, hue_timed_event).start()
+
     timed_event()
+    hue_timed_event()
 
     def user_callback(image, svg_canvas):
         nonlocal last_time
@@ -172,11 +180,7 @@ def main():
             if len(results):
                 visitor = results[0][0]
                 #set countertop lights to bird color
-                b = phillips_hue.Bridge('192.168.0.156')
-                try:
-                    phillips_hue.setLights(visitor, 'Countertop Lights')
-                except:
-                    print("Failed to set lights, but the main script continues to run.")
+                phillips_hue.setLights(visitor, 'Countertop Lights', hueTimer)
                 
                 if visitor not in EXCLUSIONS:
                     # If visit interval has past, clear visitors list
