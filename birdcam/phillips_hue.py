@@ -17,8 +17,8 @@ hue_birds = [
 ]
 
 def setLights(bird, lights, timer):
-    nonlocal hue_visitors
-    nonlocal hue_birds
+    global hue_visitors
+    global hue_birds
     try:
         if not timer:
             hue_visitors.append(bird)
@@ -36,7 +36,7 @@ def setLights(bird, lights, timer):
     except Exception as e:
         print("An error occurred while setting lights:", e)
 
-
+'''
     lights_state = 'no_bird,_detect'
     try:
         if bird == 'Cardinalis cardinalis (Northern Cardinal)':
@@ -54,6 +54,7 @@ def setLights(bird, lights, timer):
                 lights_state = 'no_bird_detect'
     except Exception as e:
         print("An error occurred while setting lights:", e)
+'''
 
 if __name__ == "__main__":
     # Get a dictionary with the light name as the key
