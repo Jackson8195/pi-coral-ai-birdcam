@@ -184,7 +184,7 @@ def main():
                 if visitor not in EXCLUSIONS:
                     if hueTimer:
                         print("Hue Timer up!...")
-                        timer = False
+                        hueTimer = False
                     # If visit interval has past, clear visitors list
                     if timer:
                         print("next visit...")
