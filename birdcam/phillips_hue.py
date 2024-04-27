@@ -20,10 +20,11 @@ hue_birds = [
 def setLights(bird, lights, timer):
     global hue_visitors
     global hue_birds
-    print('setLights print test')
+    print(hue_birds)
     try:
         if not timer:
             hue_visitors.append(bird)
+            print(hue_visitors)
         else:
             # Count occurrences of each list element
             counter = Counter(hue_visitors)
