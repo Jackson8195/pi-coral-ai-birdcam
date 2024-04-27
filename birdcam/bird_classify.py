@@ -181,12 +181,10 @@ def main():
                 visitor = results[0][0]
                 #set countertop lights to bird color
                 #phillips_hue.setLights(visitor, 'Countertop Lights', hueTimer)
-
-                if hueTimer:
-                    print("Hue Timer up!...")
-                    timer = False
-                
                 if visitor not in EXCLUSIONS:
+                    if hueTimer:
+                        print("Hue Timer up!...")
+                        timer = False
                     # If visit interval has past, clear visitors list
                     if timer:
                         print("next visit...")
