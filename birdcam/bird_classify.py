@@ -147,7 +147,7 @@ def main():
     def hue_timed_event():
         nonlocal hueTimer
         hueTimer = True
-        threading.Timer(DURATION, hue_timed_event).start()
+        threading.Timer(3, hue_timed_event).start()
 
     timed_event()
     hue_timed_event()
