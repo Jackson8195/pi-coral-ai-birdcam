@@ -182,8 +182,8 @@ def main():
                 #set countertop lights to bird color
                 #phillips_hue.setLights(visitor, 'Countertop Lights', hueTimer)
 
-                def hueTimeTest(timer):
-                    if timer:
+                def hueTimeTest(x):
+                    if x:
                         print("Hue Timer up!...")
                         timer = False
 
