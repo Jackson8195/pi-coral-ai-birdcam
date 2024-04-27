@@ -17,6 +17,12 @@ hue_birds = [
     ['Cyanocitta cristata (Blue Jay)', 45000, 255, 255]
 ]
 
+#test function for demonic threading timers that suck ass
+def print_time_left(timer):
+    while timer.is_alive():
+        time_left = timer.interval - (time.time() - timer.start_time)
+        print("Time left: {:.2f} seconds".format(time_left))
+        time.sleep(1)  # Adjust sleep interval as needed
 
 def setLights(bird, lights):
     hueTimer2 = False
@@ -29,6 +35,7 @@ def setLights(bird, lights):
     try:
         if not hueTimer2:
             print("Hue Timer running")
+            print_time_left(hueTimer2)
             hue_visitors.append(bird)
         else:
             print("Hue Time up!!!!!!!!!!!!!!!!!!!!")
