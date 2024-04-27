@@ -19,7 +19,7 @@ hue_birds = [
 
 #test function for demonic threading timers that suck ass
 def print_time_left(timer):
-    while timer.is_alive():
+    while timer.finished.is_set() == False:
         time_left = timer.interval - (time.time() - timer.start_time)
         print("Time left: {:.2f} seconds".format(time_left))
         time.sleep(1)  # Adjust sleep interval as needed
