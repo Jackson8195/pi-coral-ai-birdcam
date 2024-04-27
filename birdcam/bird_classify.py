@@ -183,13 +183,8 @@ def main():
                 #phillips_hue.setLights(visitor, 'Countertop Lights', hueTimer)
 
                 def hueTimeTest(timer):
-                    global hueTimer
-                    if not timer:
-                        print("Hue Timer running")
-                        #hue_visitors.append(bird)
-                        #print(hue_visitors)
-                    else:
-                        print("Hue Time up!!!!!!!!!!!!!!!!!!!!")
+                    if timer:
+                        print("Hue Timer up!...")
                         timer = False
 
                 hueTimeTest(hueTimer)
