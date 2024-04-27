@@ -17,12 +17,17 @@ hue_birds = [
     ['Cyanocitta cristata (Blue Jay)', 45000, 255, 255]
 ]
 
-def setLights(bird, lights, timer):
-    global hue_visitors
+hueTimer2 = False
+
+def setLights(bird, lights):
+    def hue_timed_event2():
+        global hueTimer2
+        hueTimer2 = True
+        threading.Timer(3, hue_timed_event2).start()
     global hue_birds
     global hueTimer
     try:
-        if not timer:
+        if not hueTimer2:
             print("Hue Timer running")
             hue_visitors.append(bird)
             print(hue_visitors)
@@ -40,7 +45,7 @@ def setLights(bird, lights, timer):
                 pass
             #clear the list and reset the timer
             hue_visitors.clear()
-            timer = False
+            hueTimer2 = False
     except Exception as e:
         print("An error occurred while setting lights:", e)
 
