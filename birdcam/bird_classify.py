@@ -179,12 +179,10 @@ def main():
             # Custom model mode:
             if len(results):
                 visitor = results[0][0]
-                #set countertop lights to bird color
-                #phillips_hue.setLights(visitor, 'Countertop Lights', hueTimer)
+                
                 if visitor not in EXCLUSIONS:
-                    if hueTimer:
-                        print("Hue Timer up!...")
-                        hueTimer = False
+                    #set countertop lights to bird color
+                    phillips_hue.setLights(visitor, 'Countertop Lights', hueTimer)
                     # If visit interval has past, clear visitors list
                     if timer:
                         print("next visit...")
