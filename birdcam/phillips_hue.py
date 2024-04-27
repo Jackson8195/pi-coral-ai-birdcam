@@ -30,7 +30,6 @@ def setLights(bird, lights):
         if not hueTimer2:
             print("Hue Timer running")
             hue_visitors.append(bird)
-            print(hue_visitors)
         else:
             print("Hue Time up!!!!!!!!!!!!!!!!!!!!")
             # Count occurrences of each list element
