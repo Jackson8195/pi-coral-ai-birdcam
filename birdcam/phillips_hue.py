@@ -12,7 +12,7 @@ b.connect()
 bridge_state = b.get_api()
 
 hue_birds = [
-    ['Cardinalis cardinalis (Northern Cardinal)', 0, 255, 255]
+    ['Cardinalis cardinalis (Northern Cardinal)', 0, 255, 255],
     ['Cyanocitta cristata (Blue Jay)', 45000, 255, 255]
 ]
 
