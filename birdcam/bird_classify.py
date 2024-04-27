@@ -134,7 +134,6 @@ def main():
     last_time = time.monotonic()
     last_results = [('label', 0)]
     visitors = []
-    hue_visitors = []
 
     DURATION = args.visit_interval
     timer = False

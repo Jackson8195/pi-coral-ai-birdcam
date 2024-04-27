@@ -11,6 +11,7 @@ b.connect()
 # Get the bridge state (This returns the full dictionary that you can explore)
 bridge_state = b.get_api()
 
+hue_visitors = []
 hue_birds = [
     ['Cardinalis cardinalis (Northern Cardinal)', 0, 255, 255],
     ['Cyanocitta cristata (Blue Jay)', 45000, 255, 255]
