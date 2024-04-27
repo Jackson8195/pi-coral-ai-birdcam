@@ -157,6 +157,7 @@ def main():
         nonlocal last_results
         nonlocal visitors
         nonlocal timer
+        nonlocal hueTimer
         current_time = datetime.datetime.now()
         formatted_time = current_time.strftime("%m/%d/%Y %H:%M:%S")
         start_time = time.monotonic()
