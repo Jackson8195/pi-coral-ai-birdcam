@@ -20,6 +20,7 @@ hue_birds = [
 def setLights(bird, lights, timer):
     global hue_visitors
     global hue_birds
+    print('setLights print test')
     try:
         if not timer:
             hue_visitors.append(bird)
@@ -58,7 +59,7 @@ def setLights(bird, lights, timer):
                 lights_state = 'no_bird_detect'
     except Exception as e:
         print("An error occurred while setting lights:", e)
-'''
+
 
 if __name__ == "__main__":
     # Get a dictionary with the light name as the key
@@ -84,3 +85,4 @@ if __name__ == "__main__":
     #Test setting lights function
     setLights('Cyanocitta cristata (Blue Jay)', 'Countertop Lights')
     pass
+'''
