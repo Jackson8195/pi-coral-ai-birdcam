@@ -32,6 +32,7 @@ def setLights(bird, lights, timer):
                 bird_lookup = [entry for entry in hue_birds if entry[0] == most_common_bird]
                 b.set_light(lights, {'hue': bird_lookup[1], 'sat': bird_lookup[2], 'bri': bird_lookup[3]})
             #clear the list and reset the timer
+            print(most_common_bird)
             hue_visitors.clear()
             timer = False
     except Exception as e:
