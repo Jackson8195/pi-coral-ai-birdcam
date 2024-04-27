@@ -20,7 +20,6 @@ hue_birds = [
 def setLights(bird, lights, timer):
     global hue_visitors
     global hue_birds
-    print(hue_birds)
     try:
         if not timer:
             hue_visitors.append(bird)
@@ -29,8 +28,8 @@ def setLights(bird, lights, timer):
             # Count occurrences of each list element
             counter = Counter(hue_visitors)
             # Get the most common element over the timer duration and its count
-            most_common_bird = counter.most_common(1)[0]
-            print("Most common: ",most_common_bird)
+            #most_common_bird = counter.most_common(1)[0]
+            #print("Most common: ",most_common_bird)
             #if any(most_common_bird == entry[0] for entry in hue_birds):
                 #bird_lookup = [entry for entry in hue_birds if entry[0] == most_common_bird]
                 #b.set_light(lights, {'hue': bird_lookup[1], 'sat': bird_lookup[2], 'bri': bird_lookup[3]})
