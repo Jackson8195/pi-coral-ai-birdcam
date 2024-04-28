@@ -135,6 +135,10 @@ def main():
     last_results = [('label', 0)]
     visitors = []
     hueVisitors = []
+    hue_birds = [
+        ['Cardinalis cardinalis (Northern Cardinal)', 0, 255, 255],
+        ['Cyanocitta cristata (Blue Jay)', 45000, 255, 255]
+    ]
 
     DURATION = args.visit_interval
     timer = False
@@ -159,6 +163,8 @@ def main():
         nonlocal visitors
         nonlocal timer
         nonlocal hueTimer
+        nonlocal hue_birds
+        nonlocal hueVisitors
         current_time = datetime.datetime.now()
         formatted_time = current_time.strftime("%m/%d/%Y %H:%M:%S")
         start_time = time.monotonic()
@@ -185,10 +191,12 @@ def main():
                     #set countertop lights to bird color
                     if not hueTimer:
                         print("Hue timer running")
+                        hueVisitors.append(visitor)
                     else:
                         print("Hue Timer up!!!!!!!!!!!!!!!!!")
+                        phillips_hue.setLights('Countertop Lights', hueVisitors, hue_birds)
+                        hueVisitors.clear
                         hueTimer = False
-
 
                     # If visit interval has past, clear visitors list
                     if timer:
