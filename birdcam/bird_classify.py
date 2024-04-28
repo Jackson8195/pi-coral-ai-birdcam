@@ -196,11 +196,11 @@ def main():
                 
                 if visitor not in EXCLUSIONS:
                     #set countertop lights to bird color
-                    if not hueTimer:
-                        print("Hue timer running")
-                        hueVisitors.append(visitor)
+                    if hueTimer:
+                        print("Hue Timer up!!!!!!!!")
+                        #hueVisitors.append(visitor)
                     else:
-                        print("Hue Timer Up!!!!!!!!!!!!!")
+                        print("Hue Timer Running..")
                         #counter = Counter(hueVisitors)
                         # Get the most common element over the timer duration and its count
                         #most_common_bird = counter.most_common(1)[0][0]
