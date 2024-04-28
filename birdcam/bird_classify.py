@@ -35,6 +35,8 @@ import threading
 import datetime
 import phillips_hue
 from PIL import Image
+from collections import Counter
+from phue import Bridge
 
 from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter
@@ -46,6 +48,11 @@ import mongodb
 
 #connect to and ping the Mongo DB
 mongodb.mongoDB_connect()
+
+b = Bridge('192.168.0.156')
+
+# If the app is not registered and the button is not pressed, press the button and call connect() (this only needs to be run a single time)
+b.connect()
 
 
 def save_data(image, results, path, ext='png'):
@@ -193,10 +200,15 @@ def main():
                         print("Hue timer running")
                         hueVisitors.append(visitor)
                     else:
-                        print("Hue Timer up!!!!!!!!!!!!!!!!!")
-                        phillips_hue.setLights('Countertop Lights', hueVisitors, hue_birds)
-                        hueVisitors.clear
-                        hueTimer = False
+                        counter = Counter(hueVisitors)
+                        # Get the most common element over the timer duration and its count
+                        most_common_bird = counter.most_common(1)[0]
+                        print("Most common: ",most_common_bird)
+                        if any(most_common_bird == entry[0] for entry in hue_birds):
+                            bird_lookup = [entry for entry in hue_birds if entry[0] == most_common_bird]
+                            b.set_light('Countertop Lights', {'hue': bird_lookup[1], 'sat': bird_lookup[2], 'bri': bird_lookup[3]})
+                        else:
+                            pass
 
                     # If visit interval has past, clear visitors list
                     if timer:
