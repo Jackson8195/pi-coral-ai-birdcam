@@ -201,7 +201,7 @@ def main():
                         counter = Counter(hueVisitors)
                         # Get the most common element over the timer duration and its count
                         most_common_bird = counter.most_common(1)[0][0]
-                        print("type is: "type(most_common_bird))
+                        print("type is: ",type(most_common_bird))
                         print(most_common_bird)
                         '''
                         print("Most common: ",most_common_bird)
