@@ -198,6 +198,7 @@ def main():
                     #set countertop lights to bird color
                     if hueTimer:
                         print("Hue Timer up!!!!!!!!")
+                        hueTimer = False
                         #hueVisitors.append(visitor)
                     else:
                         print("Hue Timer Running..")
