@@ -187,6 +187,7 @@ def main():
                         print("Hue timer running")
                     else:
                         print("Hue Timer up!!!!!!!!!!!!!!!!!")
+                        hueTimer = False
 
 
                     # If visit interval has past, clear visitors list
