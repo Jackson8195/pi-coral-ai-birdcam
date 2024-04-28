@@ -134,6 +134,7 @@ def main():
     last_time = time.monotonic()
     last_results = [('label', 0)]
     visitors = []
+    hueVisitors = []
 
     DURATION = args.visit_interval
     timer = False
@@ -182,7 +183,12 @@ def main():
                 
                 if visitor not in EXCLUSIONS:
                     #set countertop lights to bird color
-                    #phillips_hue.setLights(visitor, 'Countertop Lights')
+                    if not hueTimer:
+                        print("Hue timer running")
+                    else:
+                        print("Hue Timer up!!!!!!!!!!!!!!!!!")
+
+
                     # If visit interval has past, clear visitors list
                     if timer:
                         print("next visit...")
