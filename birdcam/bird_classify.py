@@ -200,12 +200,11 @@ def main():
                         print("Hue Timer up!!!!!!!!")
                         counter = Counter(hueVisitors)
                         # Get the most common element over the timer duration and its count
-                        #most_common_bird = counter.most_common(1)[0][0]
-                        #print("type is: ",type(most_common_bird))
-                        #print(most_common_bird)
+                        most_common_bird = counter.most_common(1)[0][0]
+                        print(most_common_bird, "count: ", counter)
+                        print("type is: ",type(most_common_bird))
                         hueTimer = False
                         '''
-                        print("Most common: ",most_common_bird)
                         if any(most_common_bird == entry[0] for entry in hue_birds):
                             bird_lookup = [entry for entry in hue_birds if entry[0] == most_common_bird]
                             b.set_light('Countertop Lights', {'hue': bird_lookup[1], 'sat': bird_lookup[2], 'bri': bird_lookup[3]})
