@@ -200,9 +200,9 @@ def main():
                         print("Hue Timer up!!!!!!!!")
                         counter = Counter(hueVisitors)
                         # Get the most common element over the timer duration and its count
-                        most_common_bird = counter.most_common(1)[0][0]
-                        print("type is: ",type(most_common_bird))
-                        print(most_common_bird)
+                        #most_common_bird = counter.most_common(1)[0][0]
+                        #print("type is: ",type(most_common_bird))
+                        #print(most_common_bird)
                         '''
                         print("Most common: ",most_common_bird)
                         if any(most_common_bird == entry[0] for entry in hue_birds):
@@ -214,6 +214,7 @@ def main():
                     else:
                         hueVisitors.append(visitor)
                         print("Hue Timer Running..")
+                        print(hueVisitors)
                         pass
                         
 
