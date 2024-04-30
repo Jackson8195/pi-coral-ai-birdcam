@@ -195,27 +195,27 @@ def main():
             # Custom model mode:
             if len(results):
                 visitor = results[0][0]
-                
+                print(hue_bird_detect)
                 if visitor not in EXCLUSIONS:
                     #set countertop lights to bird color
-                    if hueTimer and (hueVisitors):
+                    if hueTimer and hueVisitors:
                         #print("Hue Timer up!!!!!!!!")
                         counter = Counter(hueVisitors)
                         # Get the most common element over the timer duration and its count
                         most_common_bird = counter.most_common(1)[0][0]
                         print(most_common_bird, "count: ", counter)
-                        
+                        #Get the most common bird over the timer duration and check if its in the hue_birds list
                         if any(most_common_bird == entry[0] for entry in hue_birds):
                             bird_lookup = [entry for entry in hue_birds if entry[0] == most_common_bird]
                             b.set_light('Countertop Lights', {'hue': bird_lookup[0][1], 'sat': bird_lookup[0][2], 'bri': bird_lookup[0][3]})
                             hue_bird_detect = True
                             print("Turning Lights bird colored...")
-                        elif hue_bird_detect != False:
+                        hueTimer = False
+                        hueVisitors.clear()
+                    elif hueTimer and not hueVisitors and hue_bird_detect != False:
                             b.run_scene('Kitchen','Concentrate',4)
                             hue_bird_detect = False
                             print("Turning Lights back to Concentrate...")
-                        hueTimer = False
-                        hueVisitors.clear()
                     else:
                         hueVisitors.append(visitor)
                         #print("Hue Timer Running..")
