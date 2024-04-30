@@ -45,7 +45,7 @@ python3 bird_classify.py \
     --top_k 1 \
     --threshold 0.85 \
     --storage "$tmp_dir" \
-    --print \
+    --print True\
     --visit_interval 10 &
 
 # Store the process ID of the last background command (Python script)
