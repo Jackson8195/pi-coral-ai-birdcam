@@ -146,6 +146,7 @@ def main():
         ['Cardinalis cardinalis (Northern Cardinal)', 0, 255, 255],
         ['Cyanocitta cristata (Blue Jay)', 45000, 255, 255]
     ]
+    hue_bird_detect = False
 
     DURATION = args.visit_interval
     timer = False
@@ -172,6 +173,7 @@ def main():
         nonlocal hueTimer
         nonlocal hue_birds
         nonlocal hueVisitors
+        nonlocal hue_bird_detect
         current_time = datetime.datetime.now()
         formatted_time = current_time.strftime("%m/%d/%Y %H:%M:%S")
         start_time = time.monotonic()
@@ -206,7 +208,12 @@ def main():
                         if any(most_common_bird == entry[0] for entry in hue_birds):
                             bird_lookup = [entry for entry in hue_birds if entry[0] == most_common_bird]
                             b.set_light('Countertop Lights', {'hue': bird_lookup[0][1], 'sat': bird_lookup[0][2], 'bri': bird_lookup[0][3]})
-                        
+                            hue_bird_detect = True
+                            print("Turning Lights bird colored...")
+                        elif hue_bird_detect != False:
+                            b.run_scene('Kitchen','Concentrate',4)
+                            hue_bird_detect = False
+                            print("Turning Lights back to Concentrate...")
                         hueTimer = False
                         hueVisitors.clear()
                     else:
