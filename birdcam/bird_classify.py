@@ -212,6 +212,7 @@ def main():
                             print("Turning Lights bird colored...")
                         hueTimer = False
                         hueVisitors.clear()
+                    #set lights to switch back to selected Scene if timer is up and visitors list is not populated, and detect is false
                     elif hueTimer and not hueVisitors and hue_bird_detect != False:
                             b.run_scene('Kitchen','Concentrate',4)
                             hue_bird_detect = False
@@ -221,7 +222,6 @@ def main():
                         #print("Hue Timer Running..")
                         #print(hueVisitors)
                         pass
-                        
                     # If visit interval has past, clear visitors list
                     if timer:
                         print("next visit...")
@@ -236,7 +236,11 @@ def main():
                         save_data(image,  visitor, storage_dir)
                         mongodb.mongo_insert(visitor, results[0][1], formatted_time)
                         visitors.append(visitor)
-
+            #run light switchback logic again if no results are being detected at all at the feeder
+            elif hue_bird_detect != False:
+                b.run_scene('Kitchen','Concentrate',4)
+                hue_bird_detect = False
+                print("Turning Lights back to Concentrate...")
         last_results = results
         last_time = end_time
     gstreamer.run_pipeline(user_callback, videosrc=args.videosrc)
