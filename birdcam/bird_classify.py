@@ -237,7 +237,7 @@ def main():
                         mongodb.mongo_insert(visitor, results[0][1], formatted_time)
                         visitors.append(visitor)
             #run light switchback logic again if no results are being detected at all at the feeder
-            elif hue_bird_detect != False:
+            elif hue_bird_detect != False and hueTimer:
                 b.run_scene('Kitchen','Concentrate',4)
                 hue_bird_detect = False
                 print("Turning Lights back to Concentrate...")
