@@ -240,7 +240,8 @@ def main():
             elif hue_bird_detect != False and hueTimer:
                 b.run_scene('Kitchen','Concentrate',4)
                 hue_bird_detect = False
-                print("Turning Lights back to Concentrate...")
+                hueVisitors.clear()
+                print("Turned Lights back to Concentrate...")
         last_results = results
         last_time = end_time
     gstreamer.run_pipeline(user_callback, videosrc=args.videosrc)
