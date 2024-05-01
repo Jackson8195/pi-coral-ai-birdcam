@@ -195,7 +195,6 @@ def main():
             # Custom model mode:
             if len(results):
                 visitor = results[0][0]
-                print(hue_bird_detect)
                 if visitor not in EXCLUSIONS:
                     #set countertop lights to bird color
                     if hueTimer and hueVisitors:
