@@ -33,7 +33,6 @@ import time
 import logging
 import threading
 import datetime
-import phillips_hue
 from PIL import Image
 from collections import Counter
 from phue import Bridge
