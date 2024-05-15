@@ -58,7 +58,7 @@ b.connect()
 def save_data(image, results, path, ext='png'):
     """Saves camera frame and model inference results
     to user-defined storage directory."""
-    tag = '%010d' % int(time.monotonic()*1000)
+    tag = results + '%010d' % int(time.monotonic()*1000)
     name = '%s/img-%s.%s' % (path, tag, ext)
     image.save(name)
     print('Frame saved as: %s' % name)
@@ -195,6 +195,8 @@ def main():
             # Custom model mode:
             if len(results):
                 visitor = results[0][0]
+                #variable to slice out only friendly bird name inside the parantheses
+                friendly_birdname = visitor[visitor.find('(') + 1:visitor.find(')')]
                 if visitor not in EXCLUSIONS:
                     #set countertop lights to bird color
                     if hueTimer and hueVisitors:
@@ -232,7 +234,7 @@ def main():
                         print("Visitor: ", visitor)
                         print("Score: ", results[0][1])
                         print("Visited at: ", formatted_time)
-                        save_data(image,  visitor, storage_dir)
+                        save_data(image, friendly_birdname, storage_dir)
                         mongodb.mongo_insert(visitor, results[0][1], formatted_time)
                         visitors.append(visitor)
             #run light switchback logic again if no results are being detected at all at the feeder
