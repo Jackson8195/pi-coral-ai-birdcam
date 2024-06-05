@@ -48,6 +48,8 @@ import mongodb
 #connect to and ping the Mongo DB
 mongodb.mongoDB_connect()
 
+# Set the logging level for the phue library to WARNING only
+logging.getLogger("phue").setLevel(logging.WARNING)
 b = Bridge('192.168.0.156')
 
 # If the app is not registered and the button is not pressed, press the button and call connect() (this only needs to be run a single time)
