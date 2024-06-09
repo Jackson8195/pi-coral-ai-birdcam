@@ -60,7 +60,7 @@ def detectCoralDevBoard():
 
 def run_pipeline(user_function,
                  src_size=(640,480),
-                 appsink_size=(320, 180), videosrc='/dev/video0'):
+                 appsink_size=(640, 480), videosrc='/dev/video0'):
     PIPELINE = 'v4l2src device={videosrc} ! {src_caps} ! {leaky_q}  ! tee name=t'
     if detectCoralDevBoard():
         SRC_CAPS = 'video/x-raw,format=YUY2,width={width},height={height},framerate=30/1'
