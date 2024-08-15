@@ -143,9 +143,11 @@ def main():
     last_results = [('label', 0)]
     visitors = []
     hueVisitors = []
+    #Color values using HSL values (Hue, Saturation, Brightness)
     hue_birds = [
         ['Cardinalis cardinalis (Northern Cardinal)', 0, 255, 255],
         ['Cyanocitta cristata (Blue Jay)', 45000, 255, 255]
+        ['Archilochus colubris (Ruby-throated Hummingbird)', 281, 89, 255]
     ]
     hue_bird_detect = False
 
@@ -216,7 +218,7 @@ def main():
                         hueVisitors.clear()
                     #set lights to switch back to selected Scene if timer is up and visitors list is not populated, and detect is false
                     elif hueTimer and not hueVisitors and hue_bird_detect != False:
-                            b.run_scene('Kitchen','Concentrate',4)
+                            b.run_scene('Kitchen','Concentrate',10)
                             hue_bird_detect = False
                             print("Turning Lights back to Concentrate...")
                     else:
