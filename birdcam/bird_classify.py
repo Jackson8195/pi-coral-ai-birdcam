@@ -146,7 +146,7 @@ def main():
     #Color values using HSL values (Hue, Saturation, Brightness)
     hue_birds = [
         ['Cardinalis cardinalis (Northern Cardinal)', 0, 255, 255],
-        ['Cyanocitta cristata (Blue Jay)', 45000, 255, 255]
+        ['Cyanocitta cristata (Blue Jay)', 45000, 255, 255],
         ['Archilochus colubris (Ruby-throated Hummingbird)', 281, 89, 255]
     ]
     hue_bird_detect = False
