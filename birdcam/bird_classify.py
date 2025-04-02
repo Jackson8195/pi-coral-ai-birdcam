@@ -115,6 +115,7 @@ def user_selections():
 # Start Flask server and pass the log path as a config variable
 from flask_server import app
 app.config['LOG_FILE_PATH'] = user_selections().storage + "/results.log"
+print(f"Log file path: {app.config['LOG_FILE_PATH']}")
 
 start_flask_server()
 

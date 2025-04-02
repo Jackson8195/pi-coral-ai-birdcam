@@ -31,6 +31,7 @@ def get_bird_counts():
     return jsonify(parse_log())
 
 def run_flask():
+    print("Starting Flask server...")
     app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
 
 def start_flask_server():
