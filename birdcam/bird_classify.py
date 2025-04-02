@@ -36,6 +36,7 @@ import datetime
 from PIL import Image
 from collections import Counter
 from phue import Bridge
+from flask_server import start_flask_server
 
 from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter
@@ -111,6 +112,11 @@ def user_selections():
     args = parser.parse_args()
     return args
 
+# Start Flask server and pass the log path as a config variable
+from flask_server import app
+app.config['LOG_FILE_PATH'] = user_selections().storage + "/results.log"
+
+start_flask_server()
 
 def main():
     """Creates camera pipeline, and pushes pipeline through ClassificationEngine
