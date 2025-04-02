@@ -30,6 +30,10 @@ def parse_log():
 def get_bird_counts():
     return jsonify(parse_log())
 
+@app.route('/about')
+def about():
+    return 'This is the about page'
+
 def run_flask():
     print("Starting Flask server...")
     app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
