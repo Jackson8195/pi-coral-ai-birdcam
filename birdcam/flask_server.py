@@ -3,7 +3,7 @@ import threading
 from collections import defaultdict
 
 app = Flask(__name__)
-
+'''
 def parse_log():
     bird_counts = defaultdict(int)
     
@@ -29,7 +29,7 @@ def parse_log():
 @app.route('/api/bird_counts')
 def get_bird_counts():
     return jsonify(parse_log())
-
+'''
 def run_flask():
     print("Starting Flask server...")
     app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
