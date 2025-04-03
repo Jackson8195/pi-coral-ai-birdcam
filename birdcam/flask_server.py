@@ -7,11 +7,20 @@ app = Flask(__name__)
 
 # Set Flask to log to its own file
 def configure_logging():
-    log_file = app.config.get('FLASK_LOG_FILE_PATH', '')
-    if log_file:
-        handler = logging.FileHandler(log_file)
-        handler.setLevel(logging.INFO)
-        app.logger.addHandler(handler)
+    """Configures Flask to log to a separate file."""
+    flask_log_file = app.config.get('FLASK_LOG_FILE_PATH', '')
+
+    # Create a new log handler for Flask
+    handler = logging.FileHandler(flask_log_file)
+    handler.setLevel(logging.INFO)
+
+    # Get Flask's logger and remove any previous handlers
+    flask_logger = logging.getLogger('werkzeug')  # This is Flask's default request logger
+    flask_logger.handlers.clear()  # Remove existing handlers
+    flask_logger.addHandler(handler)  # Add our custom handler
+
+    # Optionally, disable propagation to the root logger
+    flask_logger.propagate = False
 
 def parse_log():
     bird_counts = defaultdict(int)
