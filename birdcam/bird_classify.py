@@ -112,14 +112,13 @@ def user_selections():
     args = parser.parse_args()
     return args
 
-# pass the bird log and flask log path as a config variable
-from flask_server import app
+# pass the bird log and flask log path as a config variable, start Flask
+from flask_server import app, configure_logging
 app.config['LOG_FILE_PATH'] = user_selections().storage + "/results.log"
 print(f"Log file path: {app.config['LOG_FILE_PATH']}")
-
 app.config['FLASK_LOG_FILE_PATH'] = user_selections().storage + "/FlaskLogging.log"
 print(f"Flask Log file path: {app.config['FLASK_LOG_FILE_PATH']}")
-
+configure_logging()
 start_flask_server()
 
 def main():
