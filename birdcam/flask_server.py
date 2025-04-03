@@ -5,11 +5,13 @@ from collections import defaultdict
 
 app = Flask(__name__)
 
-# Set Flask to log to its own file. Path config'd in bird_classify.py
-handler = logging.FileHandler(current_app.config.get('FLASK_LOG_FILE_PATH', ''))
-handler.setLevel(logging.INFO)
-app.logger.addHandler(handler)
-
+# Set Flask to log to its own file
+def configure_logging():
+    log_file = app.config.get('FLASK_LOG_FILE_PATH', '')
+    if log_file:
+        handler = logging.FileHandler(log_file)
+        handler.setLevel(logging.INFO)
+        app.logger.addHandler(handler)
 
 def parse_log():
     bird_counts = defaultdict(int)
