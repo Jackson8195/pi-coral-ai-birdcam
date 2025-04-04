@@ -55,15 +55,15 @@ def serve_bird_images(bird):
         return f"No storage folder found at {storage_folder}.", 404
         
     all_files = os.listdir(storage_folder)
-    
+
     # Keep spaces in the search term since filenames have spaces
     search_term = bird.lower()
     print(f"DEBUG: Searching for files containing '{search_term}'")
     
     # Find all files containing the bird name (case insensitive)
     images = [f for f in all_files if search_term in f.lower()]
-    print(f"DEBUG: Found {len(images)} images for bird {bird} in {storage_folder}")
-    
+
+    #send data to template
     return render_template('image_gallery.html', bird=bird, images=images)
 
 @app.route('/images/<filename>')
@@ -71,13 +71,11 @@ def serve_image(filename):
     storage_folder = current_app.config.get('STORAGE_PATH','')
     
     if not os.path.exists(storage_folder):
-        print(f"DEBUG: Storage folder not found at {storage_folder}")
         return f"No storage folder found at {storage_folder}.", 404
         
     if os.path.exists(os.path.join(storage_folder, filename)):
         return send_from_directory(storage_folder, filename)
     else:
-        print(f"DEBUG: Image {filename} not found in {storage_folder}")
         return f"Image not found: {filename}", 404
 
 @app.route('/api/bird_counts_raw')
@@ -86,7 +84,7 @@ def get_bird_data():
 
 def run_flask():
     print("Starting Flask server...")
-    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
+    app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
 
 def start_flask_server():
     flask_thread = threading.Thread(target=run_flask)
