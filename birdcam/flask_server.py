@@ -52,7 +52,7 @@ def index():
     return render_template('index.html', bird_counts=bird_counts, storage_folder=storage_folder)
 
 
-@app.route('/test')
+@app.route('/images<storage_folder>/<bird>')
 def serve_bird_images(storage_folder, bird):
     if not os.path.exists(storage_folder):
         return "No storage folder found.", 404
