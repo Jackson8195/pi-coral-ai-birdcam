@@ -49,9 +49,6 @@ def index():
     bird_counts = parse_log()
     # Get the bird images folder path from config in bird_classify
     storage_folder = current_app.config.get('STORAGE_PATH','')
-
-    print(f"DEBUG: Storage Folder = {storage_folder}")
-    
     return render_template('index.html', bird_counts=bird_counts, storage_folder=storage_folder)
 
 

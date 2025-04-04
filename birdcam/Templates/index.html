@@ -21,7 +21,6 @@
 </head>
 <body>
     <h2>Bird Detection Summary</h2>
-    <p>Storage Folder: {{ storage_folder }}</p>
     <table>
         <tr>
             <th>Bird Species</th>
@@ -33,9 +32,7 @@
             <td>{{ bird }}</td>
             <td>{{ count }}</td>
             <td>
-                <a href="{{ url_for('serve_bird_images', storage_folder=storage_folder, bird=bird) }}" target="_blank">
-                    View Images
-                </a>
+                {{ storage_folder }}
             </td>
         </tr>
         {% endfor %}
