@@ -26,8 +26,6 @@ def configure_logging():
 def parse_log():
     bird_counts = defaultdict(int)
 
-    # Get the bird images folder path from config in bird_classify
-    storage_folder = current_app.config.get('STORAGE_PATH','')
     # Get the bird log txt file path from config in bird_classify
     log_file_path = current_app.config.get('LOG_FILE_PATH', '')
     
@@ -49,7 +47,8 @@ def parse_log():
 @app.route('/')
 def index():
     bird_counts = parse_log()
-    storage_folder=storage_folder
+    # Get the bird images folder path from config in bird_classify
+    storage_folder = current_app.config.get('STORAGE_PATH','')
     return render_template('index.html', bird_counts=bird_counts, storage_folder=storage_folder)
 
 
