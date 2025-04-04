@@ -112,7 +112,6 @@ def user_selections():
     args = parser.parse_args()
     return args
 
-print(f"DEBUG: user_selections().storage = {user_selections().storage}")
 # pass the bird log and flask log path as a config variable, start Flask
 from flask_server import app, configure_logging
 app.config['STORAGE_PATH'] = user_selections().storage
