@@ -1,6 +1,7 @@
-from flask import Flask, render_template, jsonify, current_app
+from flask import Flask, render_template, jsonify, current_app, send_from_directory
 import threading
 import logging
+import os
 from collections import defaultdict
 
 app = Flask(__name__)
@@ -24,8 +25,10 @@ def configure_logging():
 
 def parse_log():
     bird_counts = defaultdict(int)
-    
-    # Get the log file path from Flask's config
+
+    # Get the bird images folder path from config in bird_classify
+    storage_folder = current_app.config.get('STORAGE_PATH','')
+    # Get the bird log txt file path from config in bird_classify
     log_file_path = current_app.config.get('LOG_FILE_PATH', '')
     
     if not log_file_path:
@@ -46,15 +49,30 @@ def parse_log():
 @app.route('/')
 def index():
     bird_counts = parse_log()
-    return render_template('index.html', bird_counts=bird_counts)
+    storage_folder=storage_folder
+    return render_template('index.html', bird_counts=bird_counts, storage_folder=storage_folder)
+
+
+@app.route('/images/<storage_folder>/<bird>')
+def serve_bird_images(storage_folder, bird):
+    if not os.path.exists(storage_folder):
+        return "No storage folder found.", 404
+
+    # Filter images by bird name in filename
+    images = [f for f in os.listdir(storage_folder) if bird.lower().replace(" ", "_") in f.lower()]
+
+    return render_template('image_gallery.html', bird=bird, storage_folder=storage_folder, images=images)
+
+@app.route('/images/<storage_folder>/<filename>')
+def serve_image(storage_folder, filename):
+    if os.path.exists(os.path.join(storage_folder, filename)):
+        return send_from_directory(storage_folder, filename)
+    else:
+        return "Image not found", 404
 
 @app.route('/api/bird_counts_raw')
 def get_bird_data():
     return jsonify(parse_log())
-
-@app.route('/about')
-def about():
-    return 'This is the about page'
 
 def run_flask():
     print("Starting Flask server...")

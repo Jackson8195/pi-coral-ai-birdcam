@@ -30,6 +30,11 @@
         <tr>
             <td>{{ bird }}</td>
             <td>{{ count }}</td>
+            <td>
+                <a href="{{ url_for('serve_bird_images', storage_folder=storage_folder, bird=bird) }}" target="_blank">
+                    View Images
+                </a>
+            </td>
         </tr>
         {% endfor %}
     </table>
