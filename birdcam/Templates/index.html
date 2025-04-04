@@ -4,20 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bird Detections</title>
+    <style>
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
     <h2>Bird Detection Summary</h2>
-    <table border="1">
+    <table>
         <tr>
-            <th>Bird Species</th>
+            <th>Bird Species LOLLLLL</th>
             <th>Total Detections</th>
             <th>Images</th>
         </tr>
+        {% for bird, count in bird_counts.items() %}
         <tr>
-            <td>Test Bird</td>
-            <td>5</td>
-            <td>Test</td>
+            <td>{{ bird }}</td>
+            <td>{{ count }}</td>
+            <td>
+                <a href="{{ url_for('serve_bird_images', storage_folder=storage_folder, bird=bird) }}" target="_blank">
+                    View Images
+                </a>
+            </td>
         </tr>
+        {% endfor %}
     </table>
 </body>
 </html>
