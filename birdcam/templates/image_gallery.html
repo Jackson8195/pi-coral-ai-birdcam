@@ -70,7 +70,9 @@
     <div class="gallery">
         {% for image in images %}
         <div class="image-item">
-            <img src="/images/{{ image }}">
+            <a href="/images/{{ image }}" target="_blank">
+                <img src="/images/{{ image }}" alt="{{ image }}">
+            </a>
         </div>
         {% endfor %}
     </div>
