@@ -2,7 +2,7 @@
 
 {% if images %}
     {% for image in images %}
-        <img src="{{ url_for('serve_image', storage_folder=storage_folder, filename=image) }}" width="200" />
+        <img src="/images/{{ image }}">
     {% endfor %}
 {% else %}
     <p>No images found for {{ bird }}.</p>
