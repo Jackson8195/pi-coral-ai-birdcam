@@ -1,9 +1,12 @@
-<h2>Images of {{ bird }}</h2>
-
-{% if images %}
+<!-- image_gallery.html -->
+<h2>Images for {{ bird }}</h2>
+<ul>
     {% for image in images %}
-        <img src="/images/{{ image }}">
+    <li>
+        <!-- Thumbnail Image with Link to Full Image -->
+        <a href="{{ url_for('serve_image', filename=image) }}" target="_blank">
+            <img src="{{ url_for('serve_image', filename=image) }}" alt="{{ image }}" style="width: 100px;">
+        </a>
+    </li>
     {% endfor %}
-{% else %}
-    <p>No images found for {{ bird }}.</p>
-{% endif %}
+</ul>
