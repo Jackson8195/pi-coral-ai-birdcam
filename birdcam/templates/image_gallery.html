@@ -70,7 +70,7 @@
     <div class="gallery">
         {% for image in images %}
         <div class="image-item">
-            <img src="{{ url_for('serve_image', filename=storage_folder + '/' + image) }}" alt="Image of {{ bird }}">
+            <img src="/images/{{ image }}">
         </div>
         {% endfor %}
     </div>
