@@ -45,7 +45,12 @@ def parse_log():
     return bird_counts
 
 @app.route('/')
-def get_bird_counts():
+def index():
+    bird_counts = parse_log()
+    return render_template('index.html', bird_counts=bird_counts)
+
+@app.route('/api/bird_counts_raw')
+def get_bird_data():
     return jsonify(parse_log())
 
 @app.route('/about')
