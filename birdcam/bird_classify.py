@@ -18,8 +18,6 @@
 """
 Coral Smart Bird Feeder
 
-Adapted by Peter Milne
-
 Uses ClassificationEngine from the EdgeTPU API to analyse birds in
 camera video frames. Stores image of any bird visits and logs time and species.
 

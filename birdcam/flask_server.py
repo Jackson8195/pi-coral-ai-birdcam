@@ -52,17 +52,18 @@ def index():
     return render_template('index.html', bird_counts=bird_counts, storage_folder=storage_folder)
 
 
-@app.route('/images/<storage_folder>/<bird>')
+@app.route('/images<storage_folder>/<bird>')
 def serve_bird_images(storage_folder, bird):
     if not os.path.exists(storage_folder):
         return "No storage folder found.", 404
 
     # Filter images by bird name in filename
     images = [f for f in os.listdir(storage_folder) if bird.lower().replace(" ", "_") in f.lower()]
+    print(f"DEBUG: Found Images = {images}")
 
     return render_template('image_gallery.html', bird=bird, storage_folder=storage_folder, images=images)
 
-@app.route('/images/<storage_folder>/<filename>')
+@app.route('/images<storage_folder>/<filename>')
 def serve_image(storage_folder, filename):
     if os.path.exists(os.path.join(storage_folder, filename)):
         return send_from_directory(storage_folder, filename)
