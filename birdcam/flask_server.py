@@ -34,9 +34,8 @@ def parse_log():
     try:
         with open(log_file_path, 'r') as file:
             for line in file:
-                parts = line.strip().split(",")  # Split by comma (timestamp,bird)
-                if len(parts) >= 2:
-                    bird = parts[1]  # Bird name is in the second column
+                if "Results:" in line:
+                    bird = line.split("Results:")[-1].strip()
                     bird_counts[bird] += 1
     except IOError:
         print("Error reading log file.")
