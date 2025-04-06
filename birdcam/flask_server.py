@@ -82,6 +82,13 @@ def serve_image(filename):
 def get_bird_data():
     return jsonify(parse_log())
 
+@app.route('/close', methods=['POST'])
+def close_application():
+    """Gracefully stop the bird_classify script."""
+    print("Performing cleanup...")
+    os._exit(0)  # Forcefully exit the script
+    time.sleep(3)
+
 @app.route('/shutdown', methods=['POST'])
 def shutdown():
     """shutdown the raspberry pi"""
