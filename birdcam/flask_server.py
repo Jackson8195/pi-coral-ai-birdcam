@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify, current_app, send_from_direct
 import threading
 import logging
 import os
+import sys
 from collections import defaultdict
 
 app = Flask(__name__)
@@ -27,7 +28,6 @@ def parse_log():
    
     if not log_file_path:
         return bird_counts  # No log file path set
-   
     try:
         with open(log_file_path, 'r') as file:
             for line in file:
@@ -86,7 +86,7 @@ def get_bird_data():
 def close_application():
     """Gracefully stop the bird_classify script."""
     print("Performing cleanup...")
-    os._exit(0)  # Forcefully exit the script
+    sys.exit()
     time.sleep(3)
 
 @app.route('/shutdown', methods=['POST'])
