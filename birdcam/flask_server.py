@@ -82,6 +82,12 @@ def serve_image(filename):
 def get_bird_data():
     return jsonify(parse_log())
 
+@app.route('/shutdown', methods=['POST'])
+def shutdown():
+    """shutdown the raspberry pi"""
+    os.system("sudo shutdown now")
+    return "Shutting down...", 200
+
 def run_flask():
     print("Starting Flask server...")
     app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)

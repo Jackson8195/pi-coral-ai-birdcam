@@ -21,6 +21,21 @@
 </head>
 <body>
     <h2>Bird Detection Summary</h2>
+    <button onclick="shutdown()">Shutdown</button>
+    <script>
+        function shutdown() {
+            if (confirm("Are you sure you want to shut down the Raspberry Pi?")) {
+                fetch('/shutdown', { method: 'POST' })
+                    .then(response => {
+                        if (response.ok) {
+                            alert("Shutting down...");
+                        } else {
+                            alert("Failed to shut down.");
+                        }
+                    });
+            }
+        }
+    </script>
     <table>
         <tr>
             <th>Bird Speciesz</th>
