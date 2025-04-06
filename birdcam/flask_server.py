@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify, current_app, send_from_direct
 import threading
 import logging
 import os
+import time
 from collections import defaultdict
 
 app = Flask(__name__)
@@ -86,12 +87,12 @@ def close_application():
     """Gracefully stop the bird_classify script."""
     print("Performing cleanup...")
     os._exit()
-    time.sleep(3)
 
 @app.route('/shutdown', methods=['POST'])
 def shutdown():
-    """shutdown the raspberry pi"""
-    os.system("sudo shutdown now")
+    """Shutdown the Raspberry Pi after a delay."""
+    time.sleep(3)  # Wait for 3 seconds
+    os.system("sudo shutdown now")  # Shutdown the Raspberry Pi
     return "Shutting down...", 200
 
 def run_flask():
