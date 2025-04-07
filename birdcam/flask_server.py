@@ -86,7 +86,7 @@ def get_bird_data():
 def close_application():
     """Gracefully stop the bird_classify script."""
     print("Performing cleanup...")
-    os._exit()
+    os._exit(0)  # Ensure the process exits properly
 
 @app.route('/shutdown', methods=['POST'])
 def shutdown():
