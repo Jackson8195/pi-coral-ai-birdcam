@@ -25,19 +25,14 @@
     <script>
         function shutdown() {
             if (confirm("Are you sure you want to shut down the Raspberry Pi?")) {
-                // First, close the bird_classify script
-                fetch('/close', { method: 'POST' })
-                    .then(() => {
-                        // Then, send the shutdown command
-                        return fetch('/shutdown', { method: 'POST' });
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            alert("Shutting down...");
-                        } else {
-                            alert("Failed to shut down.");
-                        }
-                    });
+            fetch('/shutdown', { method: 'POST' })
+                .then(response => {
+                if (response.ok) {
+                    alert("Shutting down...");
+                } else {
+                    alert("Failed to shut down.");
+                }
+                });
             }
         }
     </script>
