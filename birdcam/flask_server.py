@@ -86,17 +86,9 @@ import threading
 
 @app.route('/shutdown', methods=['POST'])
 def close_application():
-    """Gracefully stop the bird_classify script and schedule a shutdown."""
-    print("Performing cleanup...")
-    # Schedule the shutdown in a separate thread
-    def delayed_shutdown():
-        time.sleep(4)  # Wait for 3 seconds to ensure cleanup
-        os.system("sudo shutdown now"), 200  # Shutdown the Raspberry Pi
-
-    threading.Thread(target=delayed_shutdown).start()
-
-    # Exit the script
-    os._exit(0)  # Forcefully exit the script
+    """Gracefully stop the bird_classify script and shut down the Raspberry Pi."""
+    os.system("sudo shutdown now")  # Shutdown the Raspberry Pi
+    return "Shutting down...", 200
 
 def run_flask():
     print("Starting Flask server...")
