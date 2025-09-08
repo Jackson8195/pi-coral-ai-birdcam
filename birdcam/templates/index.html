@@ -22,6 +22,7 @@
 <body>
     <h2>Bird Detection Summary</h2>
     <button onclick="shutdown()">Shutdown</button>
+    <button id="huePauseBtn" onclick="toggleHuePause()">Pause Hue Lights</button>
     <script>
         function shutdown() {
             if (confirm("Are you sure you want to shut down the Raspberry Pi?")) {
@@ -34,6 +35,19 @@
                 }
                 });
             }
+        }
+        function toggleHuePause() {
+            const btn = document.getElementById('huePauseBtn');
+            const paused = btn.textContent.includes('Resume') ? false : true;
+            fetch('/api/hue_pause', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ paused: paused })
+            }).then(response => {
+                if (response.ok) {
+                    btn.textContent = paused ? 'Resume Hue Lights' : 'Pause Hue Lights';
+                }
+            });
         }
     </script>
     <table>

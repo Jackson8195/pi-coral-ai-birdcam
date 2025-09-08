@@ -34,7 +34,7 @@ import datetime
 from PIL import Image
 from collections import Counter
 from phue import Bridge
-from flask_server import start_flask_server
+from flask_server import start_flask_server, is_hue_lights_paused
 
 from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter
@@ -207,31 +207,33 @@ def main():
                 #variable to slice out only friendly bird name inside the parantheses
                 friendly_birdname = visitor[visitor.find('(') + 1:visitor.find(')')]
                 if visitor not in EXCLUSIONS:
-                    #set countertop lights to bird color
-                    if hueTimer and hueVisitors:
-                        #print("Hue Timer up!!!!!!!!")
-                        counter = Counter(hueVisitors)
-                        # Get the most common element over the timer duration and its count
-                        most_common_bird = counter.most_common(1)[0][0]
-                        #print(most_common_bird, "count: ", counter)
-                        #Get the most common bird over the timer duration and check if its in the hue_birds list
-                        if any(most_common_bird == entry[0] for entry in hue_birds):
-                            bird_lookup = [entry for entry in hue_birds if entry[0] == most_common_bird]
-                            b.set_light('Countertop Lights', {'hue': bird_lookup[0][1], 'sat': bird_lookup[0][2], 'bri': bird_lookup[0][3]})
-                            hue_bird_detect = True
-                            print("Turning Lights bird colored...")
-                        hueTimer = False
-                        hueVisitors.clear()
-                    #set lights to switch back to selected Scene if timer is up and visitors list is not populated, and detect is false
-                    elif hueTimer and not hueVisitors and hue_bird_detect != False:
-                            b.run_scene('Kitchen','Concentrate',10)
-                            hue_bird_detect = False
-                            print("Turning Lights back to Concentrate...")
-                    else:
-                        hueVisitors.append(visitor)
-                        #print("Hue Timer Running..")
-                        #print(hueVisitors)
-                        pass
+                    # Only run hue lights logic if not paused
+                    if not is_hue_lights_paused():
+                        #set countertop lights to bird color
+                        if hueTimer and hueVisitors:
+                            #print("Hue Timer up!!!!!!!!")
+                            counter = Counter(hueVisitors)
+                            # Get the most common element over the timer duration and its count
+                            most_common_bird = counter.most_common(1)[0][0]
+                            #print(most_common_bird, "count: ", counter)
+                            #Get the most common bird over the timer duration and check if its in the hue_birds list
+                            if any(most_common_bird == entry[0] for entry in hue_birds):
+                                bird_lookup = [entry for entry in hue_birds if entry[0] == most_common_bird]
+                                b.set_light('Countertop Lights', {'hue': bird_lookup[0][1], 'sat': bird_lookup[0][2], 'bri': bird_lookup[0][3]})
+                                hue_bird_detect = True
+                                print("Turning Lights bird colored...")
+                            hueTimer = False
+                            hueVisitors.clear()
+                        #set lights to switch back to selected Scene if timer is up and visitors list is not populated, and detect is false
+                        elif hueTimer and not hueVisitors and hue_bird_detect != False:
+                                b.run_scene('Kitchen','Concentrate',10)
+                                hue_bird_detect = False
+                                print("Turning Lights back to Concentrate...")
+                        else:
+                            hueVisitors.append(visitor)
+                            #print("Hue Timer Running..")
+                            #print(hueVisitors)
+                            pass
                     # If visit interval has past, clear visitors list
                     if timer:
                         print("next visit...")
@@ -247,7 +249,7 @@ def main():
                         mongodb.mongo_insert(visitor, results[0][1], formatted_time)
                         visitors.append(visitor)
             #run light switchback logic again if no results are being detected at all at the feeder
-            elif hue_bird_detect != False and hueTimer:
+            elif hue_bird_detect != False and hueTimer and not is_hue_lights_paused():
                 b.run_scene('Kitchen','Concentrate',4)
                 hue_bird_detect = False
                 hueVisitors.clear()

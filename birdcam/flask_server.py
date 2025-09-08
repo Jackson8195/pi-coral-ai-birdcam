@@ -90,6 +90,26 @@ def close_application():
     os.system("sudo shutdown now")  # Shutdown the Raspberry Pi
     return "Shutting down...", 200
 
+hue_lights_paused = False
+
+@app.route('/api/hue_pause', methods=['POST'])
+def pause_hue_lights():
+    global hue_lights_paused
+    data = None
+    try:
+        data = flask.request.get_json()
+    except Exception:
+        pass
+    if data and 'paused' in data:
+        hue_lights_paused = data['paused']
+        print(f"Hue lights paused: {hue_lights_paused}")
+        return jsonify({'status': 'ok', 'paused': hue_lights_paused})
+    return jsonify({'status': 'error'}), 400
+
+def is_hue_lights_paused():
+    global hue_lights_paused
+    return hue_lights_paused
+
 def run_flask():
     print("Starting Flask server...")
     app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
