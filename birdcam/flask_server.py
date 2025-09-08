@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, current_app, send_from_directory
+from flask import Flask, render_template, jsonify, current_app, send_from_directory, request
 import threading
 import logging
 import os
@@ -97,7 +97,7 @@ def pause_hue_lights():
     global hue_lights_paused
     data = None
     try:
-        data = flask.request.get_json()
+        data = request.get_json()
     except Exception:
         pass
     if data and 'paused' in data:
