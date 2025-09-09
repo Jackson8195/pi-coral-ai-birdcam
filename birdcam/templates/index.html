@@ -45,10 +45,19 @@
                 body: JSON.stringify({ paused: paused })
             }).then(response => {
                 if (response.ok) {
-                    btn.textContent = paused ? 'Resume Hue Lights' : 'Pause Hue Lights';
+                    updateHuePauseButton(); // Always update from server
                 }
             });
         }
+        function updateHuePauseButton() {
+            fetch('/api/hue_pause')
+                .then(response => response.json())
+                .then(data => {
+                    const btn = document.getElementById('huePauseBtn');
+                    btn.textContent = data.paused ? 'Resume Hue Lights' : 'Pause Hue Lights';
+                });
+        }
+        window.onload = updateHuePauseButton;
     </script>
     <table>
         <tr>

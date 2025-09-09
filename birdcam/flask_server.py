@@ -106,6 +106,11 @@ def pause_hue_lights():
         return jsonify({'status': 'ok', 'paused': hue_lights_paused})
     return jsonify({'status': 'error'}), 400
 
+@app.route('/api/hue_pause', methods=['GET'])
+def get_hue_pause():
+    global hue_lights_paused
+    return jsonify({'paused': hue_lights_paused})
+
 def is_hue_lights_paused():
     global hue_lights_paused
     return hue_lights_paused
