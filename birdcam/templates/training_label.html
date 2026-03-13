@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Label Image</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            padding: 8px;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
+        .back-link {
+            display: inline-block;
+            color: #4ecca3;
+            text-decoration: none;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        /* Canvas container */
+        .canvas-wrap {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 12px;
+            touch-action: none;
+            border: 2px solid #0f3460;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #000;
+        }
+        .canvas-wrap canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* Controls */
+        .controls {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Label search */
+        .search-wrap {
+            position: relative;
+        }
+        .search-wrap input {
+            width: 100%;
+            padding: 14px 12px;
+            font-size: 1.1em;
+            border: 2px solid #0f3460;
+            border-radius: 8px;
+            background: #16213e;
+            color: #eee;
+            outline: none;
+        }
+        .search-wrap input:focus { border-color: #4ecca3; }
+        .search-wrap input::placeholder { color: #666; }
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 240px;
+            overflow-y: auto;
+            background: #16213e;
+            border: 2px solid #0f3460;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            z-index: 10;
+            display: none;
+        }
+        .dropdown.open { display: block; }
+        .dropdown-item {
+            padding: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #0f3460;
+            font-size: 1em;
+        }
+        .dropdown-item:active, .dropdown-item.highlighted { background: #0f3460; }
+        .dropdown-item .sci { color: #888; font-size: 0.8em; display: block; }
+
+        /* ID toggle */
+        .id-toggle {
+            display: flex;
+            gap: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #0f3460;
+        }
+        .id-toggle button {
+            flex: 1;
+            padding: 14px;
+            font-size: 1em;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .id-toggle .pos-btn { background: #16213e; color: #4ecca3; }
+        .id-toggle .neg-btn { background: #16213e; color: #e94560; }
+        .id-toggle .pos-btn.active { background: #4ecca3; color: #1a1a2e; }
+        .id-toggle .neg-btn.active { background: #e94560; color: #fff; }
+
+        /* Action buttons */
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        .btn {
+            flex: 1;
+            padding: 14px;
+            font-size: 1.05em;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+        .btn:disabled { opacity: 0.4; }
+        .btn-clear { background: #16213e; color: #eee; border: 2px solid #0f3460; }
+        .btn-save { background: #4ecca3; color: #1a1a2e; }
+
+        /* Status message */
+        .status {
+            text-align: center;
+            padding: 8px;
+            font-size: 0.95em;
+            border-radius: 6px;
+            display: none;
+        }
+        .status.success { display: block; background: #4ecca3; color: #1a1a2e; }
+        .status.error { display: block; background: #e94560; color: #fff; }
+
+        /* Instructions */
+        .hint {
+            text-align: center;
+            color: #888;
+            font-size: 0.85em;
+            padding: 4px;
+        }
+    </style>
+</head>
+<body>
+    <a href="javascript:history.back()" class="back-link">&larr; Back</a>
+
+    <p class="hint">Draw a box around the bird with your finger</p>
+
+    <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="labelCanvas"></canvas>
+    </div>
+
+    <div class="controls">
+        <div class="search-wrap">
+            <input type="text" id="labelSearch" placeholder="Search bird label..." autocomplete="off" autocapitalize="off">
+            <div class="dropdown" id="dropdown"></div>
+        </div>
+
+        <div class="id-toggle">
+            <button class="pos-btn active" onclick="setCorrectId(true)">Correct ID</button>
+            <button class="neg-btn" onclick="setCorrectId(false)">Wrong ID</button>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-clear" onclick="clearBox()">Clear Box</button>
+            <button class="btn btn-save" id="saveBtn" onclick="saveLabel()" disabled>Save</button>
+        </div>
+
+        <div class="status" id="status"></div>
+    </div>
+
+    <script>
+        const FILENAME = "{{ filename }}";
+        const canvas = document.getElementById('labelCanvas');
+        const ctx = canvas.getContext('2d');
+        const wrap = document.getElementById('canvasWrap');
+
+        let img = new Image();
+        let imgLoaded = false;
+        let drawing = false;
+        let startX = 0, startY = 0, endX = 0, endY = 0;
+        let bbox = null;
+        let selectedLabel = null;
+        let correctId = true;
+        let allLabels = [];
+
+        // Load the image
+        img.crossOrigin = 'anonymous';
+        img.onload = function() {
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            imgLoaded = true;
+            drawImage();
+        };
+        img.src = '/images/' + FILENAME;
+
+        function drawImage() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+            if (bbox) {
+                ctx.strokeStyle = correctId ? '#4ecca3' : '#e94560';
+                ctx.lineWidth = Math.max(3, canvas.width * 0.005);
+                ctx.setLineDash([]);
+                ctx.strokeRect(bbox.x, bbox.y, bbox.w, bbox.h);
+
+                if (selectedLabel) {
+                    const fontSize = Math.max(16, canvas.width * 0.03);
+                    ctx.font = `bold ${fontSize}px sans-serif`;
+                    const text = selectedLabel;
+                    const tm = ctx.measureText(text);
+                    const pad = 4;
+                    const tx = bbox.x;
+                    const ty = bbox.y - fontSize - pad * 2;
+                    ctx.fillStyle = correctId ? '#4ecca3' : '#e94560';
+                    ctx.fillRect(tx, ty, tm.width + pad * 2, fontSize + pad * 2);
+                    ctx.fillStyle = '#1a1a2e';
+                    ctx.fillText(text, tx + pad, bbox.y - pad);
+                }
+            }
+            if (drawing) {
+                ctx.strokeStyle = 'rgba(78,204,163,0.7)';
+                ctx.lineWidth = Math.max(2, canvas.width * 0.004);
+                ctx.setLineDash([8, 4]);
+                const rx = Math.min(startX, endX);
+                const ry = Math.min(startY, endY);
+                const rw = Math.abs(endX - startX);
+                const rh = Math.abs(endY - startY);
+                ctx.strokeRect(rx, ry, rw, rh);
+                ctx.setLineDash([]);
+            }
+        }
+
+        // Convert touch/mouse coords to canvas pixel coords
+        function getCanvasCoords(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const touch = e.touches ? e.touches[0] : e;
+            return {
+                x: (touch.clientX - rect.left) * scaleX,
+                y: (touch.clientY - rect.top) * scaleY
+            };
+        }
+
+        // Touch/mouse drawing
+        canvas.addEventListener('pointerdown', function(e) {
+            if (!imgLoaded) return;
+            e.preventDefault();
+            canvas.setPointerCapture(e.pointerId);
+            const c = getCanvasCoords(e);
+            startX = c.x; startY = c.y;
+            endX = c.x; endY = c.y;
+            drawing = true;
+            bbox = null;
+            updateSaveBtn();
+        });
+
+        canvas.addEventListener('pointermove', function(e) {
+            if (!drawing) return;
+            e.preventDefault();
+            const c = getCanvasCoords(e);
+            endX = c.x; endY = c.y;
+            drawImage();
+        });
+
+        canvas.addEventListener('pointerup', function(e) {
+            if (!drawing) return;
+            e.preventDefault();
+            drawing = false;
+            const c = getCanvasCoords(e);
+            endX = c.x; endY = c.y;
+            const rx = Math.min(startX, endX);
+            const ry = Math.min(startY, endY);
+            const rw = Math.abs(endX - startX);
+            const rh = Math.abs(endY - startY);
+            // Only accept if box is at least 10px in each dimension
+            if (rw > 10 && rh > 10) {
+                bbox = { x: rx, y: ry, w: rw, h: rh };
+            }
+            drawImage();
+            updateSaveBtn();
+        });
+
+        canvas.addEventListener('pointercancel', function(e) {
+            drawing = false;
+            drawImage();
+        });
+
+        // Label search
+        const searchInput = document.getElementById('labelSearch');
+        const dropdown = document.getElementById('dropdown');
+
+        fetch('/api/training/labels')
+            .then(r => r.json())
+            .then(data => { allLabels = data; });
+
+        searchInput.addEventListener('input', function() {
+            const q = this.value.toLowerCase().trim();
+            if (q.length < 1) {
+                dropdown.classList.remove('open');
+                return;
+            }
+            const matches = allLabels.filter(l =>
+                l.common.toLowerCase().includes(q) ||
+                l.scientific.toLowerCase().includes(q)
+            ).slice(0, 20);
+
+            if (matches.length === 0) {
+                dropdown.classList.remove('open');
+                return;
+            }
+
+            dropdown.innerHTML = matches.map(l =>
+                `<div class="dropdown-item" data-label="${escapeHtml(l.common)}">
+                    ${escapeHtml(l.common)}
+                    <span class="sci">${escapeHtml(l.scientific)}</span>
+                </div>`
+            ).join('');
+            dropdown.classList.add('open');
+
+            dropdown.querySelectorAll('.dropdown-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    selectLabel(this.dataset.label);
+                });
+            });
+        });
+
+        // Close dropdown on outside tap
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.search-wrap')) {
+                dropdown.classList.remove('open');
+            }
+        });
+
+        function selectLabel(label) {
+            selectedLabel = label;
+            searchInput.value = label;
+            dropdown.classList.remove('open');
+            drawImage();
+            updateSaveBtn();
+        }
+
+        function escapeHtml(s) {
+            const d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
+        // ID toggle
+        function setCorrectId(val) {
+            correctId = val;
+            document.querySelector('.pos-btn').classList.toggle('active', val);
+            document.querySelector('.neg-btn').classList.toggle('active', !val);
+            drawImage();
+        }
+
+        function clearBox() {
+            bbox = null;
+            drawing = false;
+            drawImage();
+            updateSaveBtn();
+        }
+
+        function updateSaveBtn() {
+            document.getElementById('saveBtn').disabled = !(bbox && selectedLabel);
+        }
+
+        function saveLabel() {
+            if (!bbox || !selectedLabel) return;
+            const btn = document.getElementById('saveBtn');
+            btn.disabled = true;
+            btn.textContent = 'Saving...';
+
+            const bboxNorm = {
+                x: bbox.x / canvas.width,
+                y: bbox.y / canvas.height,
+                width: bbox.w / canvas.width,
+                height: bbox.h / canvas.height
+            };
+
+            fetch('/api/training/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    filename: FILENAME,
+                    label: selectedLabel,
+                    bbox: bboxNorm,
+                    correct_id: correctId
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                const status = document.getElementById('status');
+                if (data.status === 'ok') {
+                    status.className = 'status success';
+                    status.textContent = 'Saved! ' + selectedLabel + (correctId ? ' (Correct ID)' : ' (Wrong ID)');
+                } else {
+                    status.className = 'status error';
+                    status.textContent = 'Error: ' + (data.error || 'Unknown error');
+                }
+                btn.textContent = 'Save';
+                btn.disabled = false;
+            })
+            .catch(err => {
+                const status = document.getElementById('status');
+                status.className = 'status error';
+                status.textContent = 'Network error: ' + err.message;
+                btn.textContent = 'Save';
+                btn.disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
