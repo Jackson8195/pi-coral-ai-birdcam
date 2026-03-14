@@ -106,7 +106,7 @@
         {% for bird, count in bird_counts.items() %}
         <tr class="color-{{ bird|lower|replace(' ', '-') }}">
             <td>
-                <i class="bird-sprite sprite-unknown sprite-{{ bird|lower|replace(' ', '-') }}"></i>
+                <span class="sprite-wrap"><i class="bird-sprite sprite-unknown sprite-{{ bird|lower|replace(' ', '-') }}"></i></span>
                 {{ bird }}
             </td>
             <td>{{ count }}</td>

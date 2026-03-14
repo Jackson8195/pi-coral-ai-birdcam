@@ -120,6 +120,8 @@
         .btn:disabled { opacity: 0.4; }
         .btn-clear { background: #16213e; color: #eee; border: 2px solid #0f3460; }
         .btn-save { background: #4ecca3; color: #0a0a1a; }
+        .btn-bg { background: #16213e; color: #888; border: 2px solid #0f3460; border-radius: 4px; padding: 14px; font-size: 1em; font-family: 'Courier New', Courier, monospace; cursor: pointer; width: 100%; transition: background 0.15s; }
+        .btn-bg:hover { background: #0f3460; color: #aaa; }
 
         /* Status message */
         .status {
@@ -159,6 +161,8 @@
             <button class="pos-btn active" onclick="setCorrectId(true)">Correct ID</button>
             <button class="neg-btn" onclick="setCorrectId(false)">Wrong ID</button>
         </div>
+
+        <button class="btn btn-bg" onclick="markBackground()">No Bird (Background)</button>
 
         <div class="actions">
             <button class="btn btn-clear" onclick="clearBox()">Clear Box</button>
@@ -362,6 +366,18 @@
 
         function updateSaveBtn() {
             document.getElementById('saveBtn').disabled = !(bbox && selectedLabel);
+        }
+
+        function markBackground() {
+            if (!imgLoaded) return;
+            bbox = { x: 0, y: 0, w: canvas.width, h: canvas.height };
+            selectedLabel = 'Background';
+            correctId = false;
+            searchInput.value = 'Background';
+            document.querySelector('.pos-btn').classList.remove('active');
+            document.querySelector('.neg-btn').classList.add('active');
+            drawImage();
+            saveLabel();
         }
 
         function saveLabel() {

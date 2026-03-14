@@ -25,7 +25,7 @@
             {% for bird, counts in training_counts.items() %}
             <tr>
                 <td>
-                    <i class="bird-sprite sprite-unknown sprite-{{ bird|lower|replace(' ', '-') }}"></i>
+                    <span class="sprite-wrap"><i class="bird-sprite sprite-unknown sprite-{{ bird|lower|replace(' ', '-') }}"></i></span>
                     {{ bird }}
                 </td>
                 <td class="pos">{{ counts.positive }}</td>
@@ -44,7 +44,7 @@
     <div class="bird-list">
         {% for bird in bird_species %}
         <a href="/training/images/{{ bird }}" class="bird-btn">
-            <i class="bird-sprite sprite-unknown sprite-{{ bird|lower|replace(' ', '-') }}"></i>
+            <span class="sprite-wrap"><i class="bird-sprite sprite-unknown sprite-{{ bird|lower|replace(' ', '-') }}"></i></span>
             {{ bird }}
         </a>
         {% endfor %}

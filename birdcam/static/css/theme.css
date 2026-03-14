@@ -278,20 +278,39 @@ a:hover { color: #6fffcc; }
    PIXEL ART BIRD SPRITES (12x12, box-shadow)
    ============================================ */
 
-.bird-sprite {
+.sprite-wrap {
     display: inline-block;
+    width: 40px;
+    height: 36px;
+    vertical-align: middle;
+    position: relative;
+    margin-right: 4px;
+}
+.bird-sprite {
+    display: block;
     width: 1px;
     height: 1px;
     transform: scale(3);
     transform-origin: top left;
-    margin-right: 42px;
-    margin-bottom: 2px;
-    vertical-align: middle;
+    position: absolute;
+    top: 2px;
+    left: 2px;
     overflow: visible;
 }
 .bird-sprite-sm {
     transform: scale(2);
-    margin-right: 28px;
+}
+.sprite-wrap-sm {
+    display: inline-block;
+    width: 28px;
+    height: 24px;
+    vertical-align: middle;
+    position: relative;
+    margin-right: 4px;
+}
+.sprite-wrap-sm .bird-sprite {
+    top: 0;
+    left: 0;
 }
 
 /* Bird hop/flap animation on new detection */
