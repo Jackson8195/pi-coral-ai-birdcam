@@ -16,9 +16,10 @@
     {% if images %}
     <div class="thumb-gallery">
         {% for image in images %}
-        <a href="/training/label/{{ image }}" class="thumb">
+        <a href="/training/label/{{ image }}" class="thumb{% if image in labeled %} labeled{% endif %}">
             <img src="/images/{{ image }}" alt="{{ image }}" loading="lazy">
             <span class="thumb-label">{{ image }}</span>
+            {% if image in labeled %}<span class="check-overlay">&#10003;</span>{% endif %}
         </a>
         {% endfor %}
     </div>

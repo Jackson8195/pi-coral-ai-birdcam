@@ -220,6 +220,18 @@ a:hover { color: #6fffcc; }
     text-decoration: none;
 }
 .thumb:active { border-color: #4ecca3; }
+.thumb.labeled { border-color: #4ecca3; opacity: 0.7; }
+.check-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4em;
+    color: #4ecca3;
+    text-shadow: 0 0 12px rgba(78, 204, 163, 0.8), 0 2px 6px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+    line-height: 1;
+}
 .thumb img { width: 100%; height: auto; display: block; }
 .thumb-label {
     position: absolute;

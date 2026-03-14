@@ -158,6 +158,24 @@ def is_hue_lights_paused():
 TRAINING_DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'training_data')
 
 
+def get_labeled_filenames():
+    """Return set of filenames that have already been labeled in training_data/."""
+    labeled = set()
+    if not os.path.isdir(TRAINING_DATA_DIR):
+        return labeled
+    for bird_dir in os.listdir(TRAINING_DATA_DIR):
+        bird_path = os.path.join(TRAINING_DATA_DIR, bird_dir)
+        if not os.path.isdir(bird_path):
+            continue
+        for id_type in ('PositiveID', 'NegativeID'):
+            id_path = os.path.join(bird_path, id_type)
+            if os.path.isdir(id_path):
+                for f in os.listdir(id_path):
+                    if f.endswith(('.png', '.jpg', '.jpeg')):
+                        labeled.add(f)
+    return labeled
+
+
 def get_training_counts():
     """Return dict of {bird: {positive: N, negative: N}} from training_data folder."""
     counts = {}
@@ -215,7 +233,8 @@ def training_bird_images(bird):
     all_files = os.listdir(storage_folder)
     search_term = bird.lower()
     images = [f for f in all_files if search_term in f.lower() and f.endswith(('.png', '.jpg', '.jpeg'))]
-    return render_template('training_select.html', bird=bird, images=images)
+    labeled = get_labeled_filenames()
+    return render_template('training_select.html', bird=bird, images=images, labeled=labeled)
 
 
 @app.route('/training/label/<filename>')
