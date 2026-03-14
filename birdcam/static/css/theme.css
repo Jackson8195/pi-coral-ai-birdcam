@@ -297,6 +297,7 @@ a:hover { color: #6fffcc; }
     vertical-align: middle;
     position: relative;
     margin-right: 4px;
+    overflow: hidden;
 }
 .bird-sprite {
     display: block;

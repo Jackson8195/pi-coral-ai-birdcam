@@ -237,10 +237,25 @@ def training_bird_images(bird):
     return render_template('training_select.html', bird=bird, images=images, labeled=labeled)
 
 
+def extract_bird_name(filename):
+    """Extract bird name from filename like 'img-NorthernCardinal0012345678.png'."""
+    import re
+    name = os.path.splitext(filename)[0]  # strip extension
+    name = re.sub(r'^img-', '', name)      # strip img- prefix
+    name = re.sub(r'\d{10,}$', '', name)   # strip trailing timestamp digits
+    # Insert spaces before uppercase letters (PascalCase -> spaced)
+    name = re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', name)
+    name = re.sub(r'(?<=[A-Z])(?=[A-Z][a-z])', ' ', name)
+    return name.strip() if name.strip() else None
+
+
 @app.route('/training/label/<filename>')
 def training_label_image(filename):
     """Show the labeling interface for a specific image."""
-    return render_template('training_label.html', filename=filename)
+    is_labeled = filename in get_labeled_filenames()
+    detected_bird = extract_bird_name(filename)
+    return render_template('training_label.html', filename=filename,
+                           is_labeled=is_labeled, detected_bird=detected_bird or '')
 
 
 @app.route('/api/training/labels')

@@ -145,6 +145,10 @@
 <body>
     <a href="javascript:history.back()" class="neon-link">&larr; Back</a>
 
+    {% if is_labeled %}
+    <div style="text-align:center; padding:6px 12px; margin:8px auto; max-width:600px; background:#4ecca3; color:#0a0a1a; border-radius:4px; font-weight:bold; font-size:0.95em;">&#10003; Already labeled</div>
+    {% endif %}
+
     <p class="hint">Draw a box around the bird with your finger</p>
 
     <div class="canvas-wrap" id="canvasWrap">
@@ -174,6 +178,7 @@
 
     <script>
         const FILENAME = "{{ filename }}";
+        const DETECTED_BIRD = "{{ detected_bird }}";
         const canvas = document.getElementById('labelCanvas');
         const ctx = canvas.getContext('2d');
         const wrap = document.getElementById('canvasWrap');
@@ -292,7 +297,13 @@
 
         fetch('/api/training/labels')
             .then(r => r.json())
-            .then(data => { allLabels = data; });
+            .then(data => {
+                allLabels = data;
+                // Auto-fill label with detected bird name on page load
+                if (DETECTED_BIRD && correctId) {
+                    autoFillDetectedBird();
+                }
+            });
 
         function toSpriteClass(name) {
             return 'sprite-' + name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
@@ -350,10 +361,29 @@
             return d.innerHTML;
         }
 
+        function autoFillDetectedBird() {
+            if (!DETECTED_BIRD) return;
+            // Find matching label (case-insensitive)
+            const match = allLabels.find(l => l.common.toLowerCase() === DETECTED_BIRD.toLowerCase());
+            if (match) {
+                selectLabel(match.common);
+            } else {
+                // Use raw detected name as fallback
+                selectLabel(DETECTED_BIRD);
+            }
+        }
+
         function setCorrectId(val) {
             correctId = val;
             document.querySelector('.pos-btn').classList.toggle('active', val);
             document.querySelector('.neg-btn').classList.toggle('active', !val);
+            if (val && DETECTED_BIRD) {
+                autoFillDetectedBird();
+            } else if (!val) {
+                selectedLabel = null;
+                searchInput.value = '';
+                updateSaveBtn();
+            }
             drawImage();
         }
 
