@@ -4,23 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Label Image</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #1a1a2e;
-            color: #eee;
-            padding: 8px;
-            -webkit-tap-highlight-color: transparent;
-            overflow-x: hidden;
-        }
-        .back-link {
-            display: inline-block;
-            color: #4ecca3;
-            text-decoration: none;
-            margin-bottom: 8px;
-            font-size: 0.9em;
-        }
+        body { overflow-x: hidden; }
 
         /* Canvas container */
         .canvas-wrap {
@@ -30,7 +16,7 @@
             margin: 0 auto 12px;
             touch-action: none;
             border: 2px solid #0f3460;
-            border-radius: 6px;
+            border-radius: 4px;
             overflow: hidden;
             background: #000;
         }
@@ -50,50 +36,56 @@
         }
 
         /* Label search */
-        .search-wrap {
-            position: relative;
-        }
+        .search-wrap { position: relative; }
         .search-wrap input {
             width: 100%;
             padding: 14px 12px;
             font-size: 1.1em;
+            font-family: 'Courier New', Courier, monospace;
             border: 2px solid #0f3460;
-            border-radius: 8px;
+            border-radius: 4px;
             background: #16213e;
             color: #eee;
             outline: none;
         }
         .search-wrap input:focus { border-color: #4ecca3; }
-        .search-wrap input::placeholder { color: #666; }
+        .search-wrap input::placeholder { color: #555; }
         .dropdown {
             position: absolute;
             top: 100%;
-            left: 0;
-            right: 0;
+            left: 0; right: 0;
             max-height: 240px;
             overflow-y: auto;
             background: #16213e;
             border: 2px solid #0f3460;
             border-top: none;
-            border-radius: 0 0 8px 8px;
+            border-radius: 0 0 4px 4px;
             z-index: 10;
             display: none;
         }
         .dropdown.open { display: block; }
         .dropdown-item {
             padding: 12px;
+            padding-left: 40px;
             cursor: pointer;
             border-bottom: 1px solid #0f3460;
             font-size: 1em;
+            position: relative;
         }
         .dropdown-item:active, .dropdown-item.highlighted { background: #0f3460; }
-        .dropdown-item .sci { color: #888; font-size: 0.8em; display: block; }
+        .dropdown-item .sci { color: #666; font-size: 0.8em; display: block; }
+        .dropdown-item .bird-sprite {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            margin-top: -6px;
+            margin-right: 0;
+        }
 
         /* ID toggle */
         .id-toggle {
             display: flex;
-            gap: 0;
-            border-radius: 8px;
+            border-radius: 4px;
             overflow: hidden;
             border: 2px solid #0f3460;
         }
@@ -102,56 +94,54 @@
             padding: 14px;
             font-size: 1em;
             font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
             border: none;
             cursor: pointer;
             transition: background 0.15s;
         }
         .id-toggle .pos-btn { background: #16213e; color: #4ecca3; }
         .id-toggle .neg-btn { background: #16213e; color: #e94560; }
-        .id-toggle .pos-btn.active { background: #4ecca3; color: #1a1a2e; }
+        .id-toggle .pos-btn.active { background: #4ecca3; color: #0a0a1a; }
         .id-toggle .neg-btn.active { background: #e94560; color: #fff; }
 
         /* Action buttons */
-        .actions {
-            display: flex;
-            gap: 8px;
-        }
+        .actions { display: flex; gap: 8px; }
         .btn {
             flex: 1;
             padding: 14px;
-            font-size: 1.05em;
+            font-size: 1em;
             font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
             border: none;
-            border-radius: 8px;
+            border-radius: 4px;
             cursor: pointer;
             transition: opacity 0.15s;
         }
         .btn:disabled { opacity: 0.4; }
         .btn-clear { background: #16213e; color: #eee; border: 2px solid #0f3460; }
-        .btn-save { background: #4ecca3; color: #1a1a2e; }
+        .btn-save { background: #4ecca3; color: #0a0a1a; }
 
         /* Status message */
         .status {
             text-align: center;
             padding: 8px;
             font-size: 0.95em;
-            border-radius: 6px;
+            border-radius: 4px;
             display: none;
         }
-        .status.success { display: block; background: #4ecca3; color: #1a1a2e; }
+        .status.success { display: block; background: #4ecca3; color: #0a0a1a; }
         .status.error { display: block; background: #e94560; color: #fff; }
 
-        /* Instructions */
         .hint {
             text-align: center;
-            color: #888;
+            color: #555;
             font-size: 0.85em;
             padding: 4px;
         }
     </style>
 </head>
 <body>
-    <a href="javascript:history.back()" class="back-link">&larr; Back</a>
+    <a href="javascript:history.back()" class="neon-link">&larr; Back</a>
 
     <p class="hint">Draw a box around the bird with your finger</p>
 
@@ -214,7 +204,7 @@
 
                 if (selectedLabel) {
                     const fontSize = Math.max(16, canvas.width * 0.03);
-                    ctx.font = `bold ${fontSize}px sans-serif`;
+                    ctx.font = `bold ${fontSize}px monospace`;
                     const text = selectedLabel;
                     const tm = ctx.measureText(text);
                     const pad = 4;
@@ -222,7 +212,7 @@
                     const ty = bbox.y - fontSize - pad * 2;
                     ctx.fillStyle = correctId ? '#4ecca3' : '#e94560';
                     ctx.fillRect(tx, ty, tm.width + pad * 2, fontSize + pad * 2);
-                    ctx.fillStyle = '#1a1a2e';
+                    ctx.fillStyle = '#0a0a1a';
                     ctx.fillText(text, tx + pad, bbox.y - pad);
                 }
             }
@@ -239,7 +229,6 @@
             }
         }
 
-        // Convert touch/mouse coords to canvas pixel coords
         function getCanvasCoords(e) {
             const rect = canvas.getBoundingClientRect();
             const scaleX = canvas.width / rect.width;
@@ -251,7 +240,6 @@
             };
         }
 
-        // Touch/mouse drawing
         canvas.addEventListener('pointerdown', function(e) {
             if (!imgLoaded) return;
             e.preventDefault();
@@ -282,7 +270,6 @@
             const ry = Math.min(startY, endY);
             const rw = Math.abs(endX - startX);
             const rh = Math.abs(endY - startY);
-            // Only accept if box is at least 10px in each dimension
             if (rw > 10 && rh > 10) {
                 bbox = { x: rx, y: ry, w: rw, h: rh };
             }
@@ -303,6 +290,10 @@
             .then(r => r.json())
             .then(data => { allLabels = data; });
 
+        function toSpriteClass(name) {
+            return 'sprite-' + name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        }
+
         searchInput.addEventListener('input', function() {
             const q = this.value.toLowerCase().trim();
             if (q.length < 1) {
@@ -321,6 +312,7 @@
 
             dropdown.innerHTML = matches.map(l =>
                 `<div class="dropdown-item" data-label="${escapeHtml(l.common)}">
+                    <i class="bird-sprite bird-sprite-sm sprite-unknown ${toSpriteClass(l.common)}"></i>
                     ${escapeHtml(l.common)}
                     <span class="sci">${escapeHtml(l.scientific)}</span>
                 </div>`
@@ -334,7 +326,6 @@
             });
         });
 
-        // Close dropdown on outside tap
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.search-wrap')) {
                 dropdown.classList.remove('open');
@@ -355,7 +346,6 @@
             return d.innerHTML;
         }
 
-        // ID toggle
         function setCorrectId(val) {
             correctId = val;
             document.querySelector('.pos-btn').classList.toggle('active', val);

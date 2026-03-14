@@ -1,0 +1,406 @@
+/* ============================================
+   Birdcam Dark Neon Pixel Theme
+   Lightweight theme for Raspberry Pi Zero 2W
+   ============================================ */
+
+/* Pixel font for headings only */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* --- Base Reset & Dark Theme --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background: #0a0a1a;
+    color: #d0d0d0;
+    padding: 12px;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 100vh;
+}
+
+/* Scanline overlay */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+        transparent, transparent 3px,
+        rgba(0, 0, 0, 0.06) 3px, rgba(0, 0, 0, 0.06) 6px
+    );
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* --- Neon Typography --- */
+h2 {
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    font-size: 0.95em;
+    color: #4ecca3;
+    text-shadow: 0 0 6px #4ecca3, 0 0 12px rgba(78, 204, 163, 0.4);
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+    line-height: 1.6;
+}
+h3 {
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    font-size: 0.7em;
+    color: #fff;
+    background: linear-gradient(90deg, #e94560, #0f3460);
+    padding: 10px 12px;
+    border-radius: 4px;
+    margin: 18px 0 10px;
+    letter-spacing: 1px;
+    line-height: 1.6;
+}
+
+/* --- Links --- */
+a { color: #4ecca3; }
+a:hover { color: #6fffcc; }
+.neon-link, .back-link {
+    display: inline-block;
+    color: #4ecca3;
+    text-decoration: none;
+    margin-bottom: 12px;
+    font-size: 0.9em;
+}
+
+/* --- Buttons --- */
+.neon-btn {
+    display: inline-block;
+    padding: 10px 18px;
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    font-size: 0.55em;
+    background: #16213e;
+    color: #4ecca3;
+    border: 2px solid #0f3460;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
+    margin: 4px;
+    letter-spacing: 1px;
+}
+.neon-btn:hover, .neon-btn:active {
+    background: #0f3460;
+    border-color: #4ecca3;
+    color: #fff;
+}
+.neon-btn-accent {
+    background: #4ecca3;
+    color: #0a0a1a;
+    border-color: #4ecca3;
+    font-weight: bold;
+}
+.neon-btn-accent:hover {
+    background: #6fffcc;
+    border-color: #6fffcc;
+    color: #0a0a1a;
+}
+.neon-btn-danger {
+    color: #e94560;
+    border-color: #e94560;
+}
+.neon-btn-danger:hover {
+    background: #e94560;
+    color: #fff;
+}
+
+/* --- Tables --- */
+.neon-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.9em;
+}
+.neon-table th {
+    background: #16213e;
+    color: #4ecca3;
+    padding: 10px 8px;
+    text-align: left;
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    font-size: 0.6em;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #0f3460;
+}
+.neon-table td {
+    padding: 8px;
+    border-bottom: 1px solid #16213e;
+    vertical-align: middle;
+}
+.neon-table tr:hover { background: rgba(78, 204, 163, 0.06); }
+.neon-table a { text-decoration: none; }
+
+.pos { color: #4ecca3; font-weight: bold; }
+.neg { color: #e94560; font-weight: bold; }
+
+/* --- Gallery --- */
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px;
+}
+.image-item {
+    max-width: 100%;
+    width: 100%;
+    text-align: center;
+}
+.image-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    border: 2px solid #16213e;
+    box-shadow: 0 0 8px rgba(78, 204, 163, 0.2);
+}
+@media (max-width: 600px) {
+    .image-item { width: 100%; }
+    .gallery { padding: 4px; gap: 4px; }
+}
+@media (min-width: 601px) {
+    .image-item { width: 48%; }
+}
+@media (min-width: 1024px) {
+    .image-item { width: 30%; }
+}
+
+/* --- Bird Selection Buttons --- */
+.bird-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.bird-btn {
+    display: block;
+    background: #16213e;
+    color: #eee;
+    text-decoration: none;
+    padding: 14px 16px;
+    border-radius: 4px;
+    font-size: 1em;
+    transition: background 0.15s;
+    border: 1px solid #0f3460;
+}
+.bird-btn:hover, .bird-btn:active {
+    background: #0f3460;
+    color: #4ecca3;
+}
+
+/* --- Thumbnails --- */
+.thumb-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.thumb {
+    width: calc(50% - 4px);
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 2px solid #16213e;
+    transition: border-color 0.15s;
+    text-decoration: none;
+}
+.thumb:active { border-color: #4ecca3; }
+.thumb img { width: 100%; height: auto; display: block; }
+.thumb-label {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 4px 6px;
+    font-size: 0.65em;
+    color: #d0d0d0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+@media (min-width: 600px) {
+    .thumb { width: calc(33.33% - 6px); }
+}
+
+/* --- Utility --- */
+.empty { color: #555; padding: 20px 0; text-align: center; }
+.btn-row { margin: 8px 0; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+
+/* ============================================
+   PIXEL ART BIRD SPRITES (12x12, box-shadow)
+   ============================================ */
+
+.bird-sprite {
+    display: inline-block;
+    width: 1px;
+    height: 1px;
+    transform: scale(3);
+    transform-origin: top left;
+    margin-right: 42px;
+    margin-bottom: 2px;
+    vertical-align: middle;
+    overflow: visible;
+}
+.bird-sprite-sm {
+    transform: scale(2);
+    margin-right: 28px;
+}
+
+/* Fallback: generic bird silhouette (gray) */
+.sprite-unknown {
+    box-shadow:
+        5px 1px 0 #666, 6px 1px 0 #666,
+        4px 2px 0 #777, 5px 2px 0 #888, 6px 2px 0 #888, 7px 2px 0 #777,
+        3px 3px 0 #666, 4px 3px 0 #888, 5px 3px 0 #999, 6px 3px 0 #999, 7px 3px 0 #888, 8px 3px 0 #666,
+        3px 4px 0 #777, 4px 4px 0 #999, 5px 4px 0 #aaa, 6px 4px 0 #aaa, 7px 4px 0 #999, 8px 4px 0 #777,
+        2px 5px 0 #555, 3px 5px 0 #888, 4px 5px 0 #999, 5px 5px 0 #aaa, 6px 5px 0 #aaa, 7px 5px 0 #999, 8px 5px 0 #888,
+        2px 6px 0 #666, 3px 6px 0 #888, 4px 6px 0 #999, 5px 6px 0 #aaa, 6px 6px 0 #aaa, 7px 6px 0 #999, 8px 6px 0 #888, 9px 6px 0 #666,
+        1px 7px 0 #555, 2px 7px 0 #777, 3px 7px 0 #888, 4px 7px 0 #999, 5px 7px 0 #999, 6px 7px 0 #999, 7px 7px 0 #888, 8px 7px 0 #777,
+        2px 8px 0 #666, 3px 8px 0 #777, 4px 8px 0 #888, 5px 8px 0 #888, 6px 8px 0 #888, 7px 8px 0 #777,
+        3px 9px 0 #666, 4px 9px 0 #777, 5px 9px 0 #777, 6px 9px 0 #777,
+        4px 10px 0 #555, 5px 10px 0 #666,
+        4px 11px 0 #555, 6px 11px 0 #555;
+}
+
+/* Northern Cardinal: red body, crest, black mask, orange beak */
+.sprite-northern-cardinal {
+    box-shadow:
+        5px 0px 0 #cc0000, 6px 0px 0 #cc0000,
+        4px 1px 0 #cc0000, 5px 1px 0 #ff1a1a, 6px 1px 0 #ff1a1a, 7px 1px 0 #cc0000,
+        3px 2px 0 #cc0000, 4px 2px 0 #ff1a1a, 5px 2px 0 #ff1a1a, 6px 2px 0 #ff1a1a, 7px 2px 0 #cc0000,
+        2px 3px 0 #cc0000, 3px 3px 0 #ff1a1a, 4px 3px 0 #222, 5px 3px 0 #ff1a1a, 6px 3px 0 #222, 7px 3px 0 #ff1a1a, 8px 3px 0 #cc0000,
+        1px 4px 0 #ff8800, 2px 4px 0 #ffaa00, 3px 4px 0 #222, 4px 4px 0 #ff1a1a, 5px 4px 0 #ff1a1a, 6px 4px 0 #ff1a1a, 7px 4px 0 #ff1a1a, 8px 4px 0 #cc0000,
+        2px 5px 0 #cc0000, 3px 5px 0 #222, 4px 5px 0 #ff1a1a, 5px 5px 0 #ff3333, 6px 5px 0 #ff3333, 7px 5px 0 #ff1a1a, 8px 5px 0 #cc0000,
+        2px 6px 0 #cc0000, 3px 6px 0 #ff1a1a, 4px 6px 0 #ff3333, 5px 6px 0 #ff3333, 6px 6px 0 #ff3333, 7px 6px 0 #ff1a1a, 8px 6px 0 #cc0000, 9px 6px 0 #990000,
+        3px 7px 0 #cc0000, 4px 7px 0 #ff1a1a, 5px 7px 0 #ff3333, 6px 7px 0 #ff3333, 7px 7px 0 #ff1a1a, 8px 7px 0 #cc0000,
+        3px 8px 0 #990000, 4px 8px 0 #cc0000, 5px 8px 0 #ff1a1a, 6px 8px 0 #ff1a1a, 7px 8px 0 #cc0000, 8px 8px 0 #990000,
+        4px 9px 0 #990000, 5px 9px 0 #cc0000, 6px 9px 0 #cc0000, 7px 9px 0 #990000,
+        4px 10px 0 #555, 5px 10px 0 #555, 6px 10px 0 #555,
+        4px 11px 0 #444, 6px 11px 0 #444;
+}
+
+/* Blue Jay: blue body, crest, black necklace, white belly */
+.sprite-blue-jay {
+    box-shadow:
+        5px 0px 0 #2266cc, 6px 0px 0 #2266cc,
+        4px 1px 0 #2266cc, 5px 1px 0 #3388ee, 6px 1px 0 #3388ee, 7px 1px 0 #2266cc,
+        3px 2px 0 #2266cc, 4px 2px 0 #3388ee, 5px 2px 0 #44aaff, 6px 2px 0 #3388ee, 7px 2px 0 #2266cc,
+        2px 3px 0 #2266cc, 3px 3px 0 #3388ee, 4px 3px 0 #fff, 5px 3px 0 #44aaff, 6px 3px 0 #fff, 7px 3px 0 #3388ee, 8px 3px 0 #2266cc,
+        1px 4px 0 #333, 2px 4px 0 #444, 3px 4px 0 #3388ee, 4px 4px 0 #44aaff, 5px 4px 0 #44aaff, 6px 4px 0 #44aaff, 7px 4px 0 #3388ee, 8px 4px 0 #2266cc,
+        2px 5px 0 #222, 3px 5px 0 #222, 4px 5px 0 #222, 5px 5px 0 #eee, 6px 5px 0 #eee, 7px 5px 0 #222, 8px 5px 0 #2266cc,
+        3px 6px 0 #2266cc, 4px 6px 0 #eee, 5px 6px 0 #fff, 6px 6px 0 #fff, 7px 6px 0 #eee, 8px 6px 0 #2266cc, 9px 6px 0 #1a4488,
+        3px 7px 0 #2266cc, 4px 7px 0 #ddd, 5px 7px 0 #eee, 6px 7px 0 #eee, 7px 7px 0 #ddd, 8px 7px 0 #2266cc,
+        3px 8px 0 #1a4488, 4px 8px 0 #2266cc, 5px 8px 0 #3388ee, 6px 8px 0 #3388ee, 7px 8px 0 #2266cc, 8px 8px 0 #1a4488,
+        4px 9px 0 #2266cc, 5px 9px 0 #fff, 6px 9px 0 #222, 7px 9px 0 #2266cc,
+        4px 10px 0 #555, 5px 10px 0 #555, 6px 10px 0 #555,
+        4px 11px 0 #444, 6px 11px 0 #444;
+}
+
+/* Tufted Titmouse: gray body, crest, black forehead, pale belly */
+.sprite-tufted-titmouse {
+    box-shadow:
+        5px 0px 0 #888, 6px 0px 0 #888,
+        4px 1px 0 #888, 5px 1px 0 #999, 6px 1px 0 #999, 7px 1px 0 #888,
+        3px 2px 0 #777, 4px 2px 0 #222, 5px 2px 0 #333, 6px 2px 0 #999, 7px 2px 0 #888,
+        2px 3px 0 #777, 3px 3px 0 #999, 4px 3px 0 #fff, 5px 3px 0 #aaa, 6px 3px 0 #fff, 7px 3px 0 #999, 8px 3px 0 #777,
+        1px 4px 0 #555, 2px 4px 0 #666, 3px 4px 0 #aaa, 4px 4px 0 #bbb, 5px 4px 0 #bbb, 6px 4px 0 #bbb, 7px 4px 0 #aaa, 8px 4px 0 #777,
+        2px 5px 0 #888, 3px 5px 0 #aaa, 4px 5px 0 #ccc, 5px 5px 0 #ddd, 6px 5px 0 #ddd, 7px 5px 0 #aaa, 8px 5px 0 #888,
+        3px 6px 0 #888, 4px 6px 0 #ddd, 5px 6px 0 #eee, 6px 6px 0 #eee, 7px 6px 0 #ddd, 8px 6px 0 #888, 9px 6px 0 #666,
+        3px 7px 0 #777, 4px 7px 0 #ccc, 5px 7px 0 #ddd, 6px 7px 0 #ddd, 7px 7px 0 #ccc, 8px 7px 0 #777,
+        3px 8px 0 #666, 4px 8px 0 #888, 5px 8px 0 #aaa, 6px 8px 0 #aaa, 7px 8px 0 #888, 8px 8px 0 #cc8844,
+        4px 9px 0 #777, 5px 9px 0 #888, 6px 9px 0 #888,
+        4px 10px 0 #555, 5px 10px 0 #666, 6px 10px 0 #555,
+        4px 11px 0 #444, 6px 11px 0 #444;
+}
+
+/* House Sparrow: brown/gray, black bib, streaked */
+.sprite-house-sparrow {
+    box-shadow:
+        4px 1px 0 #8b6914, 5px 1px 0 #a07828, 6px 1px 0 #a07828, 7px 1px 0 #8b6914,
+        3px 2px 0 #8b6914, 4px 2px 0 #a07828, 5px 2px 0 #b08830, 6px 2px 0 #a07828, 7px 2px 0 #8b6914,
+        2px 3px 0 #8b6914, 3px 3px 0 #a07828, 4px 3px 0 #fff, 5px 3px 0 #b08830, 6px 3px 0 #fff, 7px 3px 0 #a07828, 8px 3px 0 #8b6914,
+        1px 4px 0 #555, 2px 4px 0 #666, 3px 4px 0 #a07828, 4px 4px 0 #b08830, 5px 4px 0 #b08830, 6px 4px 0 #b08830, 7px 4px 0 #a07828, 8px 4px 0 #8b6914,
+        2px 5px 0 #8b6914, 3px 5px 0 #222, 4px 5px 0 #333, 5px 5px 0 #333, 6px 5px 0 #333, 7px 5px 0 #222, 8px 5px 0 #8b6914,
+        3px 6px 0 #8b6914, 4px 6px 0 #ddd, 5px 6px 0 #eee, 6px 6px 0 #eee, 7px 6px 0 #ddd, 8px 6px 0 #8b6914, 9px 6px 0 #705010,
+        3px 7px 0 #705010, 4px 7px 0 #ccc, 5px 7px 0 #ddd, 6px 7px 0 #ddd, 7px 7px 0 #ccc, 8px 7px 0 #705010,
+        3px 8px 0 #705010, 4px 8px 0 #8b6914, 5px 8px 0 #a07828, 6px 8px 0 #a07828, 7px 8px 0 #8b6914, 8px 8px 0 #705010,
+        4px 9px 0 #705010, 5px 9px 0 #8b6914, 6px 9px 0 #8b6914,
+        4px 10px 0 #555, 5px 10px 0 #666, 6px 10px 0 #555,
+        4px 11px 0 #444, 6px 11px 0 #444;
+}
+
+/* House Finch: red head/breast, brown streaked body */
+.sprite-house-finch {
+    box-shadow:
+        4px 1px 0 #cc2222, 5px 1px 0 #dd3333, 6px 1px 0 #dd3333, 7px 1px 0 #cc2222,
+        3px 2px 0 #cc2222, 4px 2px 0 #dd3333, 5px 2px 0 #ee4444, 6px 2px 0 #dd3333, 7px 2px 0 #cc2222,
+        2px 3px 0 #cc2222, 3px 3px 0 #dd3333, 4px 3px 0 #fff, 5px 3px 0 #ee4444, 6px 3px 0 #fff, 7px 3px 0 #dd3333, 8px 3px 0 #cc2222,
+        1px 4px 0 #555, 2px 4px 0 #666, 3px 4px 0 #dd3333, 4px 4px 0 #ee4444, 5px 4px 0 #ee4444, 6px 4px 0 #ee4444, 7px 4px 0 #dd3333, 8px 4px 0 #996633,
+        2px 5px 0 #cc2222, 3px 5px 0 #dd3333, 4px 5px 0 #ee4444, 5px 5px 0 #eee, 6px 5px 0 #eee, 7px 5px 0 #996633, 8px 5px 0 #886622,
+        3px 6px 0 #886622, 4px 6px 0 #ddd, 5px 6px 0 #eee, 6px 6px 0 #886622, 7px 6px 0 #ddd, 8px 6px 0 #886622, 9px 6px 0 #775511,
+        3px 7px 0 #886622, 4px 7px 0 #ccc, 5px 7px 0 #886622, 6px 7px 0 #ddd, 7px 7px 0 #886622, 8px 7px 0 #775511,
+        3px 8px 0 #775511, 4px 8px 0 #886622, 5px 8px 0 #996633, 6px 8px 0 #996633, 7px 8px 0 #886622, 8px 8px 0 #775511,
+        4px 9px 0 #775511, 5px 9px 0 #886622, 6px 9px 0 #886622,
+        4px 10px 0 #555, 5px 10px 0 #666, 6px 10px 0 #555,
+        4px 11px 0 #444, 6px 11px 0 #444;
+}
+
+/* Red-bellied Woodpecker: black/white barred back, red cap, pale belly */
+.sprite-red-bellied-woodpecker {
+    box-shadow:
+        5px 0px 0 #cc0000, 6px 0px 0 #cc0000,
+        4px 1px 0 #cc0000, 5px 1px 0 #ee2222, 6px 1px 0 #ee2222, 7px 1px 0 #cc0000,
+        3px 2px 0 #cc0000, 4px 2px 0 #ee2222, 5px 2px 0 #ee2222, 6px 2px 0 #ee2222, 7px 2px 0 #cc0000,
+        2px 3px 0 #888, 3px 3px 0 #999, 4px 3px 0 #fff, 5px 3px 0 #aaa, 6px 3px 0 #fff, 7px 3px 0 #999, 8px 3px 0 #888,
+        1px 4px 0 #555, 2px 4px 0 #777, 3px 4px 0 #999, 4px 4px 0 #aaa, 5px 4px 0 #aaa, 6px 4px 0 #aaa, 7px 4px 0 #999, 8px 4px 0 #888,
+        2px 5px 0 #222, 3px 5px 0 #eee, 4px 5px 0 #222, 5px 5px 0 #eee, 6px 5px 0 #222, 7px 5px 0 #eee, 8px 5px 0 #222,
+        3px 6px 0 #eee, 4px 6px 0 #222, 5px 6px 0 #eee, 6px 6px 0 #222, 7px 6px 0 #eee, 8px 6px 0 #222, 9px 6px 0 #eee,
+        3px 7px 0 #222, 4px 7px 0 #eee, 5px 7px 0 #222, 6px 7px 0 #eee, 7px 7px 0 #222, 8px 7px 0 #eee,
+        3px 8px 0 #ddd, 4px 8px 0 #eee, 5px 8px 0 #eee, 6px 8px 0 #eee, 7px 8px 0 #ddd,
+        4px 9px 0 #888, 5px 9px 0 #999, 6px 9px 0 #888,
+        4px 10px 0 #555, 5px 10px 0 #666, 6px 10px 0 #555,
+        4px 11px 0 #444, 6px 11px 0 #444;
+}
+
+/* Downy Woodpecker: small, black/white, red nape spot */
+.sprite-downy-woodpecker {
+    box-shadow:
+        4px 1px 0 #222, 5px 1px 0 #333, 6px 1px 0 #cc0000, 7px 1px 0 #222,
+        3px 2px 0 #222, 4px 2px 0 #333, 5px 2px 0 #333, 6px 2px 0 #333, 7px 2px 0 #222,
+        2px 3px 0 #222, 3px 3px 0 #eee, 4px 3px 0 #fff, 5px 3px 0 #333, 6px 3px 0 #fff, 7px 3px 0 #333, 8px 3px 0 #222,
+        1px 4px 0 #555, 2px 4px 0 #666, 3px 4px 0 #333, 4px 4px 0 #eee, 5px 4px 0 #333, 6px 4px 0 #eee, 7px 4px 0 #333, 8px 4px 0 #222,
+        2px 5px 0 #222, 3px 5px 0 #eee, 4px 5px 0 #fff, 5px 5px 0 #eee, 6px 5px 0 #fff, 7px 5px 0 #222, 8px 5px 0 #222,
+        3px 6px 0 #222, 4px 6px 0 #eee, 5px 6px 0 #fff, 6px 6px 0 #fff, 7px 6px 0 #eee, 8px 6px 0 #222, 9px 6px 0 #222,
+        3px 7px 0 #222, 4px 7px 0 #ddd, 5px 7px 0 #eee, 6px 7px 0 #eee, 7px 7px 0 #ddd, 8px 7px 0 #222,
+        3px 8px 0 #222, 4px 8px 0 #222, 5px 8px 0 #eee, 6px 8px 0 #222, 7px 8px 0 #222, 8px 8px 0 #222,
+        4px 9px 0 #222, 5px 9px 0 #eee, 6px 9px 0 #222,
+        4px 10px 0 #555, 5px 10px 0 #666, 6px 10px 0 #555,
+        4px 11px 0 #444, 6px 11px 0 #444;
+}
+
+/* Black-capped Chickadee: black cap/bib, white cheeks, buff sides */
+.sprite-black-capped-chickadee {
+    box-shadow:
+        4px 1px 0 #222, 5px 1px 0 #222, 6px 1px 0 #222, 7px 1px 0 #222,
+        3px 2px 0 #222, 4px 2px 0 #111, 5px 2px 0 #111, 6px 2px 0 #111, 7px 2px 0 #222,
+        2px 3px 0 #222, 3px 3px 0 #eee, 4px 3px 0 #fff, 5px 3px 0 #222, 6px 3px 0 #fff, 7px 3px 0 #eee, 8px 3px 0 #222,
+        1px 4px 0 #555, 2px 4px 0 #666, 3px 4px 0 #eee, 4px 4px 0 #fff, 5px 4px 0 #222, 6px 4px 0 #fff, 7px 4px 0 #eee, 8px 4px 0 #222,
+        2px 5px 0 #222, 3px 5px 0 #222, 4px 5px 0 #222, 5px 5px 0 #222, 6px 5px 0 #222, 7px 5px 0 #222, 8px 5px 0 #888,
+        3px 6px 0 #888, 4px 6px 0 #ddd, 5px 6px 0 #eee, 6px 6px 0 #eee, 7px 6px 0 #ddd, 8px 6px 0 #888, 9px 6px 0 #666,
+        3px 7px 0 #888, 4px 7px 0 #ccaa77, 5px 7px 0 #ddd, 6px 7px 0 #ddd, 7px 7px 0 #ccaa77, 8px 7px 0 #888,
+        3px 8px 0 #777, 4px 8px 0 #ccaa77, 5px 8px 0 #ccaa77, 6px 8px 0 #ccaa77, 7px 8px 0 #ccaa77, 8px 8px 0 #777,
+        4px 9px 0 #888, 5px 9px 0 #999, 6px 9px 0 #888,
+        4px 10px 0 #555, 5px 10px 0 #666, 6px 10px 0 #555,
+        4px 11px 0 #444, 6px 11px 0 #444;
+}
+
+/* Carolina Wren: warm brown, upturned tail, white eyebrow */
+.sprite-carolina-wren {
+    box-shadow:
+        4px 1px 0 #8b5a2b, 5px 1px 0 #a0683c, 6px 1px 0 #a0683c, 7px 1px 0 #8b5a2b,
+        3px 2px 0 #8b5a2b, 4px 2px 0 #a0683c, 5px 2px 0 #b07840, 6px 2px 0 #a0683c, 7px 2px 0 #8b5a2b,
+        2px 3px 0 #eee, 3px 3px 0 #a0683c, 4px 3px 0 #fff, 5px 3px 0 #b07840, 6px 3px 0 #fff, 7px 3px 0 #a0683c, 8px 3px 0 #eee,
+        1px 4px 0 #555, 2px 4px 0 #777, 3px 4px 0 #b07840, 4px 4px 0 #c08848, 5px 4px 0 #c08848, 6px 4px 0 #c08848, 7px 4px 0 #b07840, 8px 4px 0 #8b5a2b,
+        2px 5px 0 #8b5a2b, 3px 5px 0 #b07840, 4px 5px 0 #c08848, 5px 5px 0 #ddd, 6px 5px 0 #ddd, 7px 5px 0 #b07840, 8px 5px 0 #8b5a2b,
+        3px 6px 0 #8b5a2b, 4px 6px 0 #ddd, 5px 6px 0 #eee, 6px 6px 0 #eee, 7px 6px 0 #ddd, 8px 6px 0 #8b5a2b, 9px 6px 0 #704820,
+        3px 7px 0 #8b5a2b, 4px 7px 0 #ccaa77, 5px 7px 0 #ddd, 6px 7px 0 #ddd, 7px 7px 0 #ccaa77, 8px 7px 0 #8b5a2b,
+        3px 8px 0 #704820, 4px 8px 0 #8b5a2b, 5px 8px 0 #a0683c, 6px 8px 0 #a0683c, 7px 8px 0 #8b5a2b, 8px 8px 0 #704820,
+        4px 9px 0 #704820, 5px 9px 0 #8b5a2b, 6px 9px 0 #704820, 9px 9px 0 #8b5a2b, 10px 9px 0 #704820,
+        4px 10px 0 #555, 5px 10px 0 #666, 6px 10px 0 #555, 9px 10px 0 #a0683c, 10px 10px 0 #8b5a2b,
+        4px 11px 0 #444, 6px 11px 0 #444;
+}

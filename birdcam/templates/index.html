@@ -4,26 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bird Detections</title>
-    <style>
-        table {
-            width: 50%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
 </head>
 <body>
     <h2>Bird Detection Summary</h2>
-    <a href="/training" style="display:inline-block;padding:8px 16px;background:#4ecca3;color:#1a1a2e;text-decoration:none;border-radius:6px;font-weight:bold;margin-bottom:8px;">Training Labels</a>
-    <button onclick="shutdown()">Shutdown</button>
-    <button id="huePauseBtn" onclick="toggleHuePause()">Pause Hue Lights</button>
+    <div class="btn-row">
+        <a href="/training" class="neon-btn neon-btn-accent">Training Labels</a>
+        <button class="neon-btn neon-btn-danger" onclick="shutdown()">Shutdown</button>
+        <button class="neon-btn" id="huePauseBtn" onclick="toggleHuePause()">Pause Hue Lights</button>
+    </div>
     <script>
         function shutdown() {
             if (confirm("Are you sure you want to shut down the Raspberry Pi?")) {
@@ -46,7 +35,7 @@
                 body: JSON.stringify({ paused: paused })
             }).then(response => {
                 if (response.ok) {
-                    updateHuePauseButton(); // Always update from server
+                    updateHuePauseButton();
                 }
             });
         }
@@ -60,7 +49,7 @@
         }
         window.onload = updateHuePauseButton;
     </script>
-    <table>
+    <table class="neon-table">
         <tr>
             <th>Bird Species</th>
             <th>Total Detections</th>
@@ -68,7 +57,10 @@
         </tr>
         {% for bird, count in bird_counts.items() %}
         <tr>
-            <td>{{ bird }}</td>
+            <td>
+                <i class="bird-sprite sprite-unknown sprite-{{ bird|lower|replace(' ', '-') }}"></i>
+                {{ bird }}
+            </td>
             <td>{{ count }}</td>
             <td>
                 <a href="/bird/{{ bird }}" target="_blank">View Images</a>
