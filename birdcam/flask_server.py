@@ -6,6 +6,7 @@ import time
 import json
 import shutil
 from collections import defaultdict
+from datetime import date
 
 app = Flask(__name__)
 
@@ -83,6 +84,43 @@ def serve_image(filename):
 @app.route('/api/bird_counts_raw')
 def get_bird_data():
     return jsonify(parse_log())
+
+@app.route('/api/stats')
+def get_stats():
+    log_file_path = current_app.config.get('LOG_FILE_PATH', '')
+    today_str = date.today().strftime('%Y-%m-%d')
+    today_counts = defaultdict(int)
+    last_detection = None
+
+    if log_file_path:
+        try:
+            with open(log_file_path, 'r') as f:
+                for line in f:
+                    if 'Results:' not in line:
+                        continue
+                    if not line.startswith(today_str):
+                        continue
+                    bird = line.split('Results:')[-1].strip()
+                    today_counts[bird] += 1
+                    try:
+                        last_detection = line[:19]
+                    except Exception:
+                        pass
+        except IOError:
+            pass
+
+    total = sum(today_counts.values())
+    species_count = len(today_counts)
+    most_frequent = max(today_counts, key=today_counts.get) if today_counts else None
+    most_frequent_count = today_counts[most_frequent] if most_frequent else 0
+
+    return jsonify({
+        'total_today': total,
+        'species_today': species_count,
+        'most_frequent': most_frequent,
+        'most_frequent_count': most_frequent_count,
+        'last_detection': last_detection
+    })
 
 import threading
 

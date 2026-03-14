@@ -47,16 +47,64 @@
                     btn.textContent = data.paused ? 'Resume Hue Lights' : 'Pause Hue Lights';
                 });
         }
-        window.onload = updateHuePauseButton;
+        let lastTotal = null;
+        function updateStats() {
+            fetch('/api/stats')
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('statTotal').textContent = data.total_today;
+                    document.getElementById('statSpecies').textContent = data.species_today;
+                    document.getElementById('statTopBird').textContent =
+                        data.most_frequent ? data.most_frequent + ' (' + data.most_frequent_count + ')' : '--';
+                    document.getElementById('statLastTime').textContent =
+                        data.last_detection ? data.last_detection.slice(11) : '--';
+                    if (lastTotal !== null && data.total_today > lastTotal) {
+                        document.querySelectorAll('.bird-sprite').forEach(function(el) {
+                            el.classList.remove('hop');
+                            void el.offsetWidth;
+                            el.classList.add('hop');
+                            el.addEventListener('animationend', function() { el.classList.remove('hop'); }, { once: true });
+                        });
+                    }
+                    lastTotal = data.total_today;
+                })
+                .catch(function() {});
+        }
+        window.onload = function() {
+            updateHuePauseButton();
+            updateStats();
+        };
+        setInterval(updateStats, 30000);
     </script>
+    <div class="stats-bar" id="statsBar">
+        <div class="stat-card">
+            <div class="stat-value" id="statTotal">--</div>
+            <div class="stat-label">Today's Visits</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="statSpecies">--</div>
+            <div class="stat-label">Species Seen</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value stat-value-sm" id="statTopBird">--</div>
+            <div class="stat-label">Top Visitor</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value stat-value-sm" id="statLastTime">--</div>
+            <div class="stat-label">Last Seen</div>
+        </div>
+    </div>
     <table class="neon-table">
-        <tr>
-            <th>Bird Species</th>
-            <th>Total Detections</th>
-            <th>Images</th>
-        </tr>
+        <thead>
+            <tr>
+                <th>Bird Species</th>
+                <th>Total Detections</th>
+                <th>Images</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for bird, count in bird_counts.items() %}
-        <tr>
+        <tr class="color-{{ bird|lower|replace(' ', '-') }}">
             <td>
                 <i class="bird-sprite sprite-unknown sprite-{{ bird|lower|replace(' ', '-') }}"></i>
                 {{ bird }}
@@ -67,6 +115,7 @@
             </td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>
 </body>
 </html>

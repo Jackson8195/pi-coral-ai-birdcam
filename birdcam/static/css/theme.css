@@ -126,7 +126,26 @@ a:hover { color: #6fffcc; }
     border-bottom: 1px solid #16213e;
     vertical-align: middle;
 }
-.neon-table tr:hover { background: rgba(78, 204, 163, 0.06); }
+/* Species color accents via CSS custom properties */
+.color-northern-cardinal      { --bird-color: #e94560; }
+.color-blue-jay                { --bird-color: #3388ee; }
+.color-tufted-titmouse         { --bird-color: #8899bb; }
+.color-house-sparrow           { --bird-color: #b08830; }
+.color-house-finch             { --bird-color: #dd5566; }
+.color-red-bellied-woodpecker  { --bird-color: #cc3333; }
+.color-downy-woodpecker        { --bird-color: #aabbcc; }
+.color-black-capped-chickadee  { --bird-color: #ccaa77; }
+.color-carolina-wren           { --bird-color: #c08848; }
+
+.neon-table tbody tr {
+    border-left: 3px solid var(--bird-color, #4ecca3);
+    transition: background 0.15s;
+}
+.neon-table tbody tr:hover { background: rgba(78, 204, 163, 0.06); }
+.neon-table tbody tr td a {
+    color: var(--bird-color, #4ecca3);
+    text-decoration: none;
+}
 .neon-table a { text-decoration: none; }
 
 .pos { color: #4ecca3; font-weight: bold; }
@@ -221,6 +240,40 @@ a:hover { color: #6fffcc; }
 .empty { color: #555; padding: 20px 0; text-align: center; }
 .btn-row { margin: 8px 0; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 
+/* --- Stats Dashboard --- */
+.stats-bar {
+    display: flex;
+    gap: 8px;
+    margin: 14px 0;
+    flex-wrap: wrap;
+}
+.stat-card {
+    flex: 1 1 0;
+    min-width: 70px;
+    background: #16213e;
+    border: 1px solid #0f3460;
+    border-radius: 4px;
+    padding: 10px 8px;
+    text-align: center;
+}
+.stat-value {
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    font-size: 1.1em;
+    color: #4ecca3;
+    text-shadow: 0 0 6px rgba(78, 204, 163, 0.5);
+    margin-bottom: 4px;
+}
+.stat-value-sm {
+    font-size: 0.55em;
+    line-height: 1.4;
+}
+.stat-label {
+    font-size: 0.65em;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
 /* ============================================
    PIXEL ART BIRD SPRITES (12x12, box-shadow)
    ============================================ */
@@ -239,6 +292,19 @@ a:hover { color: #6fffcc; }
 .bird-sprite-sm {
     transform: scale(2);
     margin-right: 28px;
+}
+
+/* Bird hop/flap animation on new detection */
+@keyframes bird-hop {
+    0%   { transform: scale(3) translateY(0) rotate(0deg); }
+    20%  { transform: scale(3) translateY(-4px) rotate(-3deg); }
+    40%  { transform: scale(3) translateY(-6px) rotate(3deg); }
+    60%  { transform: scale(3) translateY(-4px) rotate(-2deg); }
+    80%  { transform: scale(3) translateY(-2px) rotate(1deg); }
+    100% { transform: scale(3) translateY(0) rotate(0deg); }
+}
+.bird-sprite.hop {
+    animation: bird-hop 0.5s ease-out;
 }
 
 /* Fallback: generic bird silhouette (gray) */
