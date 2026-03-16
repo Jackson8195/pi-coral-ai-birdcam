@@ -1,0 +1,553 @@
+/* ============================================
+   Birdcam Dark Neon Pixel Theme
+   Lightweight theme for Raspberry Pi Zero 2W
+   ============================================ */
+
+/* Pixel font for headings only */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* --- Base Reset & Dark Theme --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background: #0a0a1a;
+    color: #d0d0d0;
+    padding: 12px;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 100vh;
+}
+
+/* Scanline overlay */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+        transparent, transparent 3px,
+        rgba(0, 0, 0, 0.06) 3px, rgba(0, 0, 0, 0.06) 6px
+    );
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* --- Neon Typography --- */
+h2 {
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    font-size: 0.95em;
+    color: #4ecca3;
+    text-shadow: 0 0 6px #4ecca3, 0 0 12px rgba(78, 204, 163, 0.4);
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+    line-height: 1.6;
+}
+h3 {
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    font-size: 0.7em;
+    color: #fff;
+    background: linear-gradient(90deg, #e94560, #0f3460);
+    padding: 10px 12px;
+    border-radius: 4px;
+    margin: 18px 0 10px;
+    letter-spacing: 1px;
+    line-height: 1.6;
+}
+
+/* --- Links --- */
+a { color: #4ecca3; }
+a:hover { color: #6fffcc; }
+.neon-link, .back-link {
+    display: inline-block;
+    color: #4ecca3;
+    text-decoration: none;
+    margin-bottom: 12px;
+    font-size: 0.9em;
+}
+
+/* --- Buttons --- */
+.neon-btn {
+    display: inline-block;
+    padding: 10px 18px;
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    font-size: 0.55em;
+    background: #16213e;
+    color: #4ecca3;
+    border: 2px solid #0f3460;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
+    margin: 4px;
+    letter-spacing: 1px;
+}
+.neon-btn:hover, .neon-btn:active {
+    background: #0f3460;
+    border-color: #4ecca3;
+    color: #fff;
+}
+.neon-btn-accent {
+    background: #4ecca3;
+    color: #0a0a1a;
+    border-color: #4ecca3;
+    font-weight: bold;
+}
+.neon-btn-accent:hover {
+    background: #6fffcc;
+    border-color: #6fffcc;
+    color: #0a0a1a;
+}
+.neon-btn-danger {
+    color: #e94560;
+    border-color: #e94560;
+}
+.neon-btn-danger:hover {
+    background: #e94560;
+    color: #fff;
+}
+
+/* --- Tables --- */
+.neon-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.9em;
+}
+.neon-table th {
+    background: #16213e;
+    color: #4ecca3;
+    padding: 10px 8px;
+    text-align: left;
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    font-size: 0.6em;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #0f3460;
+}
+.neon-table td {
+    padding: 8px;
+    border-bottom: 1px solid #16213e;
+    vertical-align: middle;
+}
+/* Species color accents via CSS custom properties */
+.color-northern-cardinal      { --bird-color: #e94560; }
+.color-blue-jay                { --bird-color: #3388ee; }
+.color-tufted-titmouse         { --bird-color: #8899bb; }
+.color-house-sparrow           { --bird-color: #b08830; }
+.color-house-finch             { --bird-color: #dd5566; }
+.color-red-bellied-woodpecker  { --bird-color: #cc3333; }
+.color-downy-woodpecker        { --bird-color: #aabbcc; }
+.color-black-capped-chickadee  { --bird-color: #ccaa77; }
+.color-carolina-wren           { --bird-color: #c08848; }
+
+.neon-table tbody tr {
+    border-left: 3px solid var(--bird-color, #4ecca3);
+    transition: background 0.15s;
+}
+.neon-table tbody tr:hover { background: rgba(78, 204, 163, 0.06); }
+.neon-table tbody tr td a {
+    color: var(--bird-color, #4ecca3);
+    text-decoration: none;
+}
+.neon-table a { text-decoration: none; }
+
+.pos { color: #4ecca3; font-weight: bold; }
+.neg { color: #e94560; font-weight: bold; }
+
+/* --- Gallery --- */
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px;
+}
+.image-item {
+    max-width: 100%;
+    width: 100%;
+    text-align: center;
+}
+.image-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    border: 2px solid #16213e;
+    box-shadow: 0 0 8px rgba(78, 204, 163, 0.2);
+}
+@media (max-width: 600px) {
+    .image-item { width: 100%; }
+    .gallery { padding: 4px; gap: 4px; }
+}
+@media (min-width: 601px) {
+    .image-item { width: 48%; }
+}
+@media (min-width: 1024px) {
+    .image-item { width: 30%; }
+}
+
+/* --- Bird Selection Buttons --- */
+.bird-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.bird-btn {
+    display: block;
+    background: #16213e;
+    color: #eee;
+    text-decoration: none;
+    padding: 14px 16px;
+    border-radius: 4px;
+    font-size: 1em;
+    transition: background 0.15s;
+    border: 1px solid #0f3460;
+}
+.bird-btn:hover, .bird-btn:active {
+    background: #0f3460;
+    color: #4ecca3;
+}
+
+/* --- Thumbnails --- */
+.thumb-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.thumb {
+    width: calc(50% - 4px);
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 2px solid #16213e;
+    transition: border-color 0.15s;
+    text-decoration: none;
+}
+.thumb:active { border-color: #4ecca3; }
+.thumb.labeled { border-color: #4ecca3; opacity: 0.7; }
+.check-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4em;
+    color: #4ecca3;
+    text-shadow: 0 0 12px rgba(78, 204, 163, 0.8), 0 2px 6px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+    line-height: 1;
+}
+.thumb img { width: 100%; height: auto; display: block; }
+.thumb-label {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 4px 6px;
+    font-size: 0.65em;
+    color: #d0d0d0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+@media (min-width: 600px) {
+    .thumb { width: calc(33.33% - 6px); }
+}
+
+/* --- Utility --- */
+.empty { color: #555; padding: 20px 0; text-align: center; }
+.btn-row { margin: 8px 0; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+
+/* --- Stats Dashboard --- */
+.stats-bar {
+    display: flex;
+    gap: 8px;
+    margin: 14px 0;
+    flex-wrap: wrap;
+}
+.stat-card {
+    flex: 1 1 0;
+    min-width: 70px;
+    background: #16213e;
+    border: 1px solid #0f3460;
+    border-radius: 4px;
+    padding: 10px 8px;
+    text-align: center;
+}
+.stat-value {
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    font-size: 1.1em;
+    color: #4ecca3;
+    text-shadow: 0 0 6px rgba(78, 204, 163, 0.5);
+    margin-bottom: 4px;
+}
+.stat-value-sm {
+    font-size: 0.55em;
+    line-height: 1.4;
+}
+.stat-label {
+    font-size: 0.65em;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ============================================
+   PIXEL ART BIRD SPRITES — Side Profile, 18×16 px base @ 2× scale
+   ============================================ */
+
+.sprite-wrap {
+    display: inline-block;
+    width: 40px;
+    height: 36px;
+    vertical-align: middle;
+    position: relative;
+    margin-right: 4px;
+    overflow: hidden;
+}
+.bird-sprite {
+    display: block;
+    width: 1px;
+    height: 1px;
+    transform: scale(2);
+    transform-origin: top left;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    overflow: visible;
+}
+.bird-sprite-sm {
+    transform: scale(1.5);
+}
+.sprite-wrap-sm {
+    display: inline-block;
+    width: 28px;
+    height: 24px;
+    vertical-align: middle;
+    position: relative;
+    margin-right: 4px;
+}
+.sprite-wrap-sm .bird-sprite {
+    top: 0;
+    left: 0;
+}
+
+/* Combined hop + wing-flap animation on new detection */
+@keyframes bird-hop {
+    0%   { transform: scale(2) translateY(0px)   rotate(0deg); }
+    12%  { transform: scale(2) translateY(-2px)  rotate(-4deg) scaleX(0.82); }
+    28%  { transform: scale(2) translateY(-5px)  rotate(3deg)  scaleX(1.12); }
+    42%  { transform: scale(2) translateY(-3px)  rotate(-2deg) scaleX(0.88); }
+    56%  { transform: scale(2) translateY(-5px)  rotate(2deg)  scaleX(1.08); }
+    70%  { transform: scale(2) translateY(-2px)  rotate(-1deg) scaleX(0.96); }
+    85%  { transform: scale(2) translateY(-1px)  rotate(0deg); }
+    100% { transform: scale(2) translateY(0px)   rotate(0deg); }
+}
+.bird-sprite.hop {
+    animation: bird-hop 0.7s ease-out;
+}
+
+/* ─── OPTION A: Side Profile Sprites (18×16 px, bird faces right) ─── */
+
+/* Fallback: generic gray silhouette */
+.sprite-unknown {
+    box-shadow:
+        8px 1px 0 #888, 9px 1px 0 #999, 10px 1px 0 #999, 11px 1px 0 #888,
+        7px 2px 0 #888, 8px 2px 0 #999, 9px 2px 0 #aaa, 10px 2px 0 #aaa, 11px 2px 0 #999, 12px 2px 0 #888,
+        6px 3px 0 #777, 7px 3px 0 #888, 8px 3px 0 #aaa, 9px 3px 0 #aaa, 10px 3px 0 #aaa, 11px 3px 0 #999, 12px 3px 0 #888, 13px 3px 0 #666, 14px 3px 0 #555,
+        5px 4px 0 #777, 6px 4px 0 #999, 7px 4px 0 #aaa, 8px 4px 0 #aaa, 9px 4px 0 #aaa, 10px 4px 0 #aaa, 11px 4px 0 #999, 12px 4px 0 #333, 13px 4px 0 #666, 14px 4px 0 #666, 15px 4px 0 #555,
+        4px 5px 0 #777, 5px 5px 0 #888, 6px 5px 0 #999, 7px 5px 0 #aaa, 8px 5px 0 #aaa, 9px 5px 0 #aaa, 10px 5px 0 #999, 11px 5px 0 #999, 12px 5px 0 #888, 13px 5px 0 #777,
+        3px 6px 0 #777, 4px 6px 0 #888, 5px 6px 0 #888, 6px 6px 0 #999, 7px 6px 0 #999, 8px 6px 0 #999, 9px 6px 0 #999, 10px 6px 0 #999, 11px 6px 0 #888, 12px 6px 0 #777,
+        2px 7px 0 #666, 3px 7px 0 #777, 4px 7px 0 #888, 5px 7px 0 #888, 6px 7px 0 #999, 7px 7px 0 #999, 8px 7px 0 #999, 9px 7px 0 #999, 10px 7px 0 #888, 11px 7px 0 #888, 12px 7px 0 #777,
+        2px 8px 0 #777, 3px 8px 0 #888, 4px 8px 0 #777, 5px 8px 0 #777, 6px 8px 0 #777, 7px 8px 0 #777, 8px 8px 0 #777, 9px 8px 0 #777, 10px 8px 0 #888, 11px 8px 0 #888, 12px 8px 0 #777,
+        1px 9px 0 #666, 2px 9px 0 #777, 3px 9px 0 #777, 4px 9px 0 #666, 5px 9px 0 #666, 6px 9px 0 #666, 7px 9px 0 #777, 8px 9px 0 #777, 9px 9px 0 #888, 10px 9px 0 #888,
+        1px 10px 0 #666, 2px 10px 0 #777, 3px 10px 0 #777, 4px 10px 0 #777, 5px 10px 0 #777, 6px 10px 0 #777, 7px 10px 0 #777, 8px 10px 0 #777, 9px 10px 0 #777,
+        1px 11px 0 #666, 2px 11px 0 #666, 3px 11px 0 #777, 4px 11px 0 #777, 5px 11px 0 #666, 6px 11px 0 #666, 7px 11px 0 #666, 8px 11px 0 #666,
+        2px 12px 0 #555, 3px 12px 0 #555, 4px 12px 0 #555, 5px 12px 0 #555, 6px 12px 0 #555, 7px 12px 0 #555,
+        2px 13px 0 #555, 3px 13px 0 #555, 4px 13px 0 #444, 5px 13px 0 #444, 6px 13px 0 #444,
+        3px 14px 0 #444, 4px 14px 0 #444, 5px 14px 0 #444, 8px 14px 0 #444, 9px 14px 0 #444,
+        7px 15px 0 #333, 8px 15px 0 #333, 9px 15px 0 #333, 10px 15px 0 #333;
+}
+
+/* Northern Cardinal: all-red body, tall crest, black mask, orange beak */
+.sprite-northern-cardinal {
+    box-shadow:
+        10px 0px 0 #cc0000,
+        9px 1px 0 #cc0000, 10px 1px 0 #dd1111, 11px 1px 0 #cc0000,
+        8px 2px 0 #cc0000, 9px 2px 0 #dd1111, 10px 2px 0 #ee2222, 11px 2px 0 #dd1111,
+        6px 3px 0 #cc0000, 7px 3px 0 #ff2222, 8px 3px 0 #ff2222, 9px 3px 0 #ff2222, 10px 3px 0 #ff2222, 11px 3px 0 #ff2222, 12px 3px 0 #dd1111, 13px 3px 0 #ff9900, 14px 3px 0 #ffaa00, 15px 3px 0 #ffbb00,
+        3px 4px 0 #111, 4px 4px 0 #111, 5px 4px 0 #111, 6px 4px 0 #111, 7px 4px 0 #ff2222, 8px 4px 0 #ff2222, 9px 4px 0 #ff2222, 10px 4px 0 #ff2222, 11px 4px 0 #ff2222, 12px 4px 0 #333, 13px 4px 0 #ff9900, 14px 4px 0 #ffaa00,
+        2px 5px 0 #111, 3px 5px 0 #111, 4px 5px 0 #111, 5px 5px 0 #cc0000, 6px 5px 0 #ff2222, 7px 5px 0 #ff2222, 8px 5px 0 #ff3333, 9px 5px 0 #ff3333, 10px 5px 0 #ff2222, 11px 5px 0 #ff2222, 12px 5px 0 #dd1111, 13px 5px 0 #cc0000,
+        2px 6px 0 #cc0000, 3px 6px 0 #dd1111, 4px 6px 0 #ff2222, 5px 6px 0 #ff3333, 6px 6px 0 #ff3333, 7px 6px 0 #ff3333, 8px 6px 0 #ff3333, 9px 6px 0 #ff3333, 10px 6px 0 #ff2222, 11px 6px 0 #dd1111, 12px 6px 0 #cc0000,
+        1px 7px 0 #bb0000, 2px 7px 0 #dd1111, 3px 7px 0 #ff2222, 4px 7px 0 #ff3333, 5px 7px 0 #ff3333, 6px 7px 0 #ff3333, 7px 7px 0 #ff3333, 8px 7px 0 #ff2222, 9px 7px 0 #ff2222, 10px 7px 0 #dd1111, 11px 7px 0 #cc0000,
+        1px 8px 0 #bb0000, 2px 8px 0 #cc0000, 3px 8px 0 #cc0000, 4px 8px 0 #990000, 5px 8px 0 #990000, 6px 8px 0 #990000, 7px 8px 0 #aa0000, 8px 8px 0 #bb0000, 9px 8px 0 #cc0000, 10px 8px 0 #cc0000,
+        1px 9px 0 #aa0000, 2px 9px 0 #bb0000, 3px 9px 0 #cc0000, 4px 9px 0 #880000, 5px 9px 0 #880000, 6px 9px 0 #880000, 7px 9px 0 #990000, 8px 9px 0 #aa0000, 9px 9px 0 #bb0000,
+        1px 10px 0 #aa0000, 2px 10px 0 #bb0000, 3px 10px 0 #cc0000, 4px 10px 0 #cc0000, 5px 10px 0 #cc0000, 6px 10px 0 #bb0000, 7px 10px 0 #aa0000, 8px 10px 0 #990000,
+        1px 11px 0 #990000, 2px 11px 0 #aa0000, 3px 11px 0 #bb0000, 4px 11px 0 #cc0000, 5px 11px 0 #cc0000, 6px 11px 0 #bb0000, 7px 11px 0 #aa0000,
+        1px 12px 0 #880000, 2px 12px 0 #880000, 3px 12px 0 #990000, 4px 12px 0 #aa0000, 5px 12px 0 #aa0000, 6px 12px 0 #990000, 7px 12px 0 #880000,
+        1px 13px 0 #770000, 2px 13px 0 #880000, 3px 13px 0 #880000, 4px 13px 0 #880000, 5px 13px 0 #880000, 6px 13px 0 #770000,
+        2px 14px 0 #660000, 3px 14px 0 #770000, 4px 14px 0 #770000, 5px 14px 0 #660000, 8px 14px 0 #555, 9px 14px 0 #555,
+        7px 15px 0 #444, 8px 15px 0 #333, 9px 15px 0 #333, 10px 15px 0 #444;
+}
+
+/* Blue Jay: blue body, tall crest, black necklace band, white belly */
+.sprite-blue-jay {
+    box-shadow:
+        10px 0px 0 #1a55bb,
+        9px 1px 0 #2266cc, 10px 1px 0 #2266cc, 11px 1px 0 #1a55bb,
+        8px 2px 0 #2266cc, 9px 2px 0 #3388ee, 10px 2px 0 #44aaff, 11px 2px 0 #2266cc,
+        6px 3px 0 #2266cc, 7px 3px 0 #3388ee, 8px 3px 0 #44aaff, 9px 3px 0 #55bbff, 10px 3px 0 #55bbff, 11px 3px 0 #3388ee, 12px 3px 0 #2266cc, 13px 3px 0 #778899, 14px 3px 0 #8899aa, 15px 3px 0 #8899aa,
+        4px 4px 0 #111, 5px 4px 0 #111, 6px 4px 0 #111, 7px 4px 0 #3388ee, 8px 4px 0 #44aaff, 9px 4px 0 #55bbff, 10px 4px 0 #44aaff, 11px 4px 0 #3388ee, 12px 4px 0 #222, 13px 4px 0 #778899, 14px 4px 0 #8899aa,
+        3px 5px 0 #eef, 4px 5px 0 #fff, 5px 5px 0 #fff, 6px 5px 0 #eef, 7px 5px 0 #2266cc, 8px 5px 0 #3388ee, 9px 5px 0 #44aaff, 10px 5px 0 #3388ee, 11px 5px 0 #2266cc, 12px 5px 0 #2266cc,
+        2px 6px 0 #111, 3px 6px 0 #111, 4px 6px 0 #111, 5px 6px 0 #111, 6px 6px 0 #111, 7px 6px 0 #111, 8px 6px 0 #111, 9px 6px 0 #111, 10px 6px 0 #111, 11px 6px 0 #111, 12px 6px 0 #111,
+        2px 7px 0 #eef, 3px 7px 0 #fff, 4px 7px 0 #fff, 5px 7px 0 #fff, 6px 7px 0 #fff, 7px 7px 0 #eef, 8px 7px 0 #2266cc, 9px 7px 0 #2266cc, 10px 7px 0 #2266cc, 11px 7px 0 #1a55bb,
+        2px 8px 0 #dde, 3px 8px 0 #eef, 4px 8px 0 #fff, 5px 8px 0 #eef, 6px 8px 0 #eef, 7px 8px 0 #dde, 8px 8px 0 #2266cc, 9px 8px 0 #2266cc, 10px 8px 0 #1a55bb,
+        1px 9px 0 #1a4488, 2px 9px 0 #2266cc, 3px 9px 0 #2266cc, 4px 9px 0 #dde, 5px 9px 0 #eef, 6px 9px 0 #dde, 7px 9px 0 #2266cc, 8px 9px 0 #2266cc, 9px 9px 0 #1a55bb,
+        1px 10px 0 #1a4488, 2px 10px 0 #1a55bb, 3px 10px 0 #2266cc, 4px 10px 0 #2266cc, 5px 10px 0 #2266cc, 6px 10px 0 #2266cc, 7px 10px 0 #1a55bb, 8px 10px 0 #1a4488,
+        1px 11px 0 #1a3366, 2px 11px 0 #1a4488, 3px 11px 0 #1a55bb, 4px 11px 0 #2266cc, 5px 11px 0 #2266cc, 6px 11px 0 #1a55bb, 7px 11px 0 #1a4488,
+        0px 12px 0 #1a3366, 1px 12px 0 #1a4488, 2px 12px 0 #1a55bb, 3px 12px 0 #2266cc, 4px 12px 0 #2266cc, 5px 12px 0 #1a55bb, 6px 12px 0 #1a4488,
+        0px 13px 0 #1a2244, 1px 13px 0 #1a3366, 2px 13px 0 #1a4488, 3px 13px 0 #1a55bb, 4px 13px 0 #1a55bb, 5px 13px 0 #1a4488,
+        1px 14px 0 #1a2244, 2px 14px 0 #1a3366, 3px 14px 0 #1a4488, 4px 14px 0 #1a4488, 8px 14px 0 #555, 9px 14px 0 #555,
+        7px 15px 0 #444, 8px 15px 0 #333, 9px 15px 0 #333, 10px 15px 0 #444;
+}
+
+/* Tufted Titmouse: blue-gray body, small crest, dark forehead, pale belly, peachy flanks */
+.sprite-tufted-titmouse {
+    box-shadow:
+        10px 0px 0 #9999bb,
+        9px 1px 0 #9999bb, 10px 1px 0 #aaaacc, 11px 1px 0 #9999bb,
+        7px 2px 0 #111, 8px 2px 0 #222, 9px 2px 0 #9999bb, 10px 2px 0 #aaaacc, 11px 2px 0 #9999bb,
+        6px 3px 0 #111, 7px 3px 0 #333, 8px 3px 0 #bbbbcc, 9px 3px 0 #ccccdd, 10px 3px 0 #ccccdd, 11px 3px 0 #bbbbcc, 12px 3px 0 #9999bb, 13px 3px 0 #556677, 14px 3px 0 #667788,
+        5px 4px 0 #444, 6px 4px 0 #aaaacc, 7px 4px 0 #ccccdd, 8px 4px 0 #ddddee, 9px 4px 0 #ddddee, 10px 4px 0 #ccccdd, 11px 4px 0 #bbbbcc, 12px 4px 0 #222, 13px 4px 0 #556677, 14px 4px 0 #667788,
+        4px 5px 0 #7788aa, 5px 5px 0 #9999bb, 6px 5px 0 #bbbbcc, 7px 5px 0 #ccccdd, 8px 5px 0 #ddddee, 9px 5px 0 #ddddee, 10px 5px 0 #ccccdd, 11px 5px 0 #aaaacc, 12px 5px 0 #9999bb,
+        3px 6px 0 #7788aa, 4px 6px 0 #9999bb, 5px 6px 0 #aaaacc, 6px 6px 0 #bbbbcc, 7px 6px 0 #ccccdd, 8px 6px 0 #ddddee, 9px 6px 0 #ddddee, 10px 6px 0 #ccccdd, 11px 6px 0 #aaaacc, 12px 6px 0 #9999bb,
+        2px 7px 0 #667799, 3px 7px 0 #7788aa, 4px 7px 0 #eeeeee, 5px 7px 0 #eeeeee, 6px 7px 0 #f0f0f0, 7px 7px 0 #eeeeee, 8px 7px 0 #aaaacc, 9px 7px 0 #aaaacc, 10px 7px 0 #9999bb, 11px 7px 0 #8899aa,
+        2px 8px 0 #667799, 3px 8px 0 #cc9966, 4px 8px 0 #ddeedd, 5px 8px 0 #eeeeee, 6px 8px 0 #f0f0f0, 7px 8px 0 #ddddee, 8px 8px 0 #9999bb, 9px 8px 0 #9999bb, 10px 8px 0 #8899aa,
+        1px 9px 0 #556688, 2px 9px 0 #cc9966, 3px 9px 0 #cc9966, 4px 9px 0 #ddeedd, 5px 9px 0 #eeeeee, 6px 9px 0 #ddddee, 7px 9px 0 #9999bb, 8px 9px 0 #8899aa, 9px 9px 0 #7788aa,
+        1px 10px 0 #556688, 2px 10px 0 #bb8855, 3px 10px 0 #cc9966, 4px 10px 0 #aaaacc, 5px 10px 0 #bbbbcc, 6px 10px 0 #aaaacc, 7px 10px 0 #8899aa, 8px 10px 0 #7788aa,
+        1px 11px 0 #556688, 2px 11px 0 #667799, 3px 11px 0 #8899aa, 4px 11px 0 #9999bb, 5px 11px 0 #9999bb, 6px 11px 0 #8899aa, 7px 11px 0 #7788aa,
+        1px 12px 0 #667799, 2px 12px 0 #778899, 3px 12px 0 #8899aa, 4px 12px 0 #8899aa, 5px 12px 0 #778899, 6px 12px 0 #667799, 7px 12px 0 #667799,
+        1px 13px 0 #556688, 2px 13px 0 #667799, 3px 13px 0 #778899, 4px 13px 0 #778899, 5px 13px 0 #667799,
+        2px 14px 0 #556688, 3px 14px 0 #667799, 4px 14px 0 #667799, 8px 14px 0 #555, 9px 14px 0 #555,
+        7px 15px 0 #444, 8px 15px 0 #333, 9px 15px 0 #333, 10px 15px 0 #444;
+}
+
+/* House Sparrow: brown cap, gray cheek, black throat bib, streaked back */
+.sprite-house-sparrow {
+    box-shadow:
+        7px 1px 0 #a07828, 8px 1px 0 #b08830, 9px 1px 0 #b08830, 10px 1px 0 #a07828,
+        6px 2px 0 #8b6914, 7px 2px 0 #a07828, 8px 2px 0 #c09838, 9px 2px 0 #c09838, 10px 2px 0 #a07828, 11px 2px 0 #8b6914,
+        5px 3px 0 #7a5c10, 6px 3px 0 #a07828, 7px 3px 0 #c09838, 8px 3px 0 #c09838, 9px 3px 0 #c09838, 10px 3px 0 #b08830, 11px 3px 0 #9a7220, 12px 3px 0 #8b6914, 13px 3px 0 #665522, 14px 3px 0 #776633,
+        4px 4px 0 #c8b880, 5px 4px 0 #d8c890, 6px 4px 0 #c8b880, 7px 4px 0 #c09838, 8px 4px 0 #c09838, 9px 4px 0 #c09838, 10px 4px 0 #b08830, 11px 4px 0 #9a7220, 12px 4px 0 #222, 13px 4px 0 #665522, 14px 4px 0 #776633,
+        3px 5px 0 #a07828, 4px 5px 0 #222, 5px 5px 0 #222, 6px 5px 0 #222, 7px 5px 0 #222, 8px 5px 0 #b08830, 9px 5px 0 #c09838, 10px 5px 0 #b08830, 11px 5px 0 #a07828,
+        3px 6px 0 #9a7220, 4px 6px 0 #222, 5px 6px 0 #444, 6px 6px 0 #ddd, 7px 6px 0 #eee, 8px 6px 0 #eee, 9px 6px 0 #ddd, 10px 6px 0 #a07828, 11px 6px 0 #9a7220,
+        2px 7px 0 #8b6914, 3px 7px 0 #9a7220, 4px 7px 0 #ddd, 5px 7px 0 #eee, 6px 7px 0 #eee, 7px 7px 0 #eee, 8px 7px 0 #ccc, 9px 7px 0 #a07828, 10px 7px 0 #9a7220, 11px 7px 0 #8b6914,
+        2px 8px 0 #8b6914, 3px 8px 0 #664422, 4px 8px 0 #a07828, 5px 8px 0 #664422, 6px 8px 0 #b08830, 7px 8px 0 #664422, 8px 8px 0 #a07828, 9px 8px 0 #9a7220, 10px 8px 0 #8b6914,
+        1px 9px 0 #7a5c10, 2px 9px 0 #8b6914, 3px 9px 0 #9a7220, 4px 9px 0 #664422, 5px 9px 0 #a07828, 6px 9px 0 #664422, 7px 9px 0 #9a7220, 8px 9px 0 #8b6914, 9px 9px 0 #7a5c10,
+        1px 10px 0 #7a5c10, 2px 10px 0 #8b6914, 3px 10px 0 #9a7220, 4px 10px 0 #9a7220, 5px 10px 0 #9a7220, 6px 10px 0 #8b6914, 7px 10px 0 #7a5c10, 8px 10px 0 #7a5c10,
+        1px 11px 0 #6b4c08, 2px 11px 0 #7a5c10, 3px 11px 0 #8b6914, 4px 11px 0 #8b6914, 5px 11px 0 #7a5c10, 6px 11px 0 #6b4c08,
+        1px 12px 0 #6b4c08, 2px 12px 0 #7a5c10, 3px 12px 0 #7a5c10, 4px 12px 0 #6b4c08, 5px 12px 0 #5a3c00, 6px 12px 0 #5a3c00,
+        1px 13px 0 #5a3c00, 2px 13px 0 #6b4c08, 3px 13px 0 #6b4c08, 4px 13px 0 #5a3c00, 5px 13px 0 #4a2c00,
+        2px 14px 0 #4a2c00, 3px 14px 0 #5a3c00, 4px 14px 0 #5a3c00, 8px 14px 0 #555, 9px 14px 0 #555,
+        7px 15px 0 #444, 8px 15px 0 #333, 9px 15px 0 #333, 10px 15px 0 #444;
+}
+
+/* House Finch: raspberry-red head/breast, brown streaked back, curved beak */
+.sprite-house-finch {
+    box-shadow:
+        7px 1px 0 #cc2222, 8px 1px 0 #dd3333, 9px 1px 0 #dd3333, 10px 1px 0 #cc2222,
+        6px 2px 0 #bb1111, 7px 2px 0 #cc2222, 8px 2px 0 #ee4444, 9px 2px 0 #ee4444, 10px 2px 0 #cc2222, 11px 2px 0 #bb1111,
+        5px 3px 0 #bb1111, 6px 3px 0 #cc2222, 7px 3px 0 #dd3333, 8px 3px 0 #ee4444, 9px 3px 0 #ee4444, 10px 3px 0 #dd3333, 11px 3px 0 #cc2222, 12px 3px 0 #bb1111, 13px 3px 0 #884422, 14px 3px 0 #995533,
+        4px 4px 0 #bb1111, 5px 4px 0 #cc2222, 6px 4px 0 #dd3333, 7px 4px 0 #ee4444, 8px 4px 0 #ff5555, 9px 4px 0 #ee4444, 10px 4px 0 #dd3333, 11px 4px 0 #cc2222, 12px 4px 0 #222, 13px 4px 0 #884422, 14px 4px 0 #995533,
+        3px 5px 0 #aa1111, 4px 5px 0 #bb1111, 5px 5px 0 #cc2222, 6px 5px 0 #dd3333, 7px 5px 0 #ee4444, 8px 5px 0 #ee4444, 9px 5px 0 #dd3333, 10px 5px 0 #cc2222, 11px 5px 0 #bb1111,
+        2px 6px 0 #aa1111, 3px 6px 0 #bb1111, 4px 6px 0 #cc2222, 5px 6px 0 #dd3333, 6px 6px 0 #ee4444, 7px 6px 0 #ee4444, 8px 6px 0 #dd3333, 9px 6px 0 #886622, 10px 6px 0 #886622, 11px 6px 0 #775511,
+        2px 7px 0 #aa1111, 3px 7px 0 #bb1111, 4px 7px 0 #cc2222, 5px 7px 0 #dd3333, 6px 7px 0 #886622, 7px 7px 0 #997733, 8px 7px 0 #886622, 9px 7px 0 #775511, 10px 7px 0 #775511,
+        1px 8px 0 #990000, 2px 8px 0 #aa1111, 3px 8px 0 #553311, 4px 8px 0 #886622, 5px 8px 0 #553311, 6px 8px 0 #886622, 7px 8px 0 #886622, 8px 8px 0 #775511, 9px 8px 0 #664400,
+        1px 9px 0 #880000, 2px 9px 0 #553311, 3px 9px 0 #886622, 4px 9px 0 #553311, 5px 9px 0 #886622, 6px 9px 0 #553311, 7px 9px 0 #775511, 8px 9px 0 #664400,
+        1px 10px 0 #664400, 2px 10px 0 #775511, 3px 10px 0 #886622, 4px 10px 0 #886622, 5px 10px 0 #775511, 6px 10px 0 #664400, 7px 10px 0 #664400,
+        1px 11px 0 #553300, 2px 11px 0 #664411, 3px 11px 0 #775522, 4px 11px 0 #775522, 5px 11px 0 #664411, 6px 11px 0 #553300,
+        1px 12px 0 #553300, 2px 12px 0 #664411, 3px 12px 0 #664411, 4px 12px 0 #553300, 5px 12px 0 #442200,
+        1px 13px 0 #442200, 2px 13px 0 #553300, 3px 13px 0 #553300, 4px 13px 0 #442200,
+        2px 14px 0 #332200, 3px 14px 0 #442200, 4px 14px 0 #442200, 8px 14px 0 #555, 9px 14px 0 #555,
+        7px 15px 0 #444, 8px 15px 0 #333, 9px 15px 0 #333, 10px 15px 0 #444;
+}
+
+/* Red-bellied Woodpecker: full red cap, bold black/white barred back, very long chisel beak */
+.sprite-red-bellied-woodpecker {
+    box-shadow:
+        9px 0px 0 #cc0000, 10px 0px 0 #cc0000,
+        8px 1px 0 #cc0000, 9px 1px 0 #dd1111, 10px 1px 0 #ee2222, 11px 1px 0 #dd1111,
+        7px 2px 0 #cc0000, 8px 2px 0 #ee2222, 9px 2px 0 #ee2222, 10px 2px 0 #ee2222, 11px 2px 0 #cc0000,
+        6px 3px 0 #cc0000, 7px 3px 0 #ee2222, 8px 3px 0 #e8d8b0, 9px 3px 0 #e8d8b0, 10px 3px 0 #dd2020, 11px 3px 0 #cc0000, 12px 3px 0 #aa9977, 13px 3px 0 #666644, 14px 3px 0 #666644, 15px 3px 0 #555533, 16px 3px 0 #444422, 17px 3px 0 #333311,
+        5px 4px 0 #cc0000, 6px 4px 0 #dd1111, 7px 4px 0 #e8d8b0, 8px 4px 0 #e8d8b0, 9px 4px 0 #e8d8b0, 10px 4px 0 #cc0000, 11px 4px 0 #bb9988, 12px 4px 0 #333, 13px 4px 0 #666644, 14px 4px 0 #666644, 15px 4px 0 #555533, 16px 4px 0 #444422,
+        4px 5px 0 #ddd0b0, 5px 5px 0 #e8d8b0, 6px 5px 0 #e8d8b0, 7px 5px 0 #e8d8b0, 8px 5px 0 #ddd0b0, 9px 5px 0 #ccbb99, 10px 5px 0 #aaa, 11px 5px 0 #999, 12px 5px 0 #888,
+        3px 6px 0 #ccbb99, 4px 6px 0 #ddd0b0, 5px 6px 0 #ddd0b0, 6px 6px 0 #ddd0b0, 7px 6px 0 #ccbb99, 8px 6px 0 #111, 9px 6px 0 #eee, 10px 6px 0 #111, 11px 6px 0 #eee, 12px 6px 0 #111,
+        2px 7px 0 #ccbb99, 3px 7px 0 #ddd0b0, 4px 7px 0 #ccbb99, 5px 7px 0 #ccbb99, 6px 7px 0 #eee, 7px 7px 0 #111, 8px 7px 0 #eee, 9px 7px 0 #111, 10px 7px 0 #eee, 11px 7px 0 #111, 12px 7px 0 #eee,
+        2px 8px 0 #bbaa88, 3px 8px 0 #ccbb99, 4px 8px 0 #ccbb99, 5px 8px 0 #111, 6px 8px 0 #eee, 7px 8px 0 #111, 8px 8px 0 #eee, 9px 8px 0 #111, 10px 8px 0 #eee, 11px 8px 0 #111,
+        1px 9px 0 #aaa988, 2px 9px 0 #bbaa88, 3px 9px 0 #bbaa88, 4px 9px 0 #eee, 5px 9px 0 #111, 6px 9px 0 #eee, 7px 9px 0 #111, 8px 9px 0 #eee, 9px 9px 0 #111, 10px 9px 0 #eee,
+        1px 10px 0 #aaa988, 2px 10px 0 #aaa988, 3px 10px 0 #111, 4px 10px 0 #eee, 5px 10px 0 #111, 6px 10px 0 #eee, 7px 10px 0 #111, 8px 10px 0 #eee, 9px 10px 0 #111,
+        1px 11px 0 #999877, 2px 11px 0 #111, 3px 11px 0 #eee, 4px 11px 0 #111, 5px 11px 0 #eee, 6px 11px 0 #111, 7px 11px 0 #eee, 8px 11px 0 #111,
+        0px 12px 0 #222, 1px 12px 0 #222, 2px 12px 0 #222, 3px 12px 0 #333, 4px 12px 0 #333, 5px 12px 0 #333, 6px 12px 0 #222,
+        0px 13px 0 #111, 1px 13px 0 #222, 2px 13px 0 #222, 3px 13px 0 #333, 4px 13px 0 #222,
+        0px 14px 0 #111, 1px 14px 0 #222, 2px 14px 0 #222, 8px 14px 0 #555, 9px 14px 0 #555,
+        7px 15px 0 #444, 8px 15px 0 #333, 9px 15px 0 #333, 10px 15px 0 #444;
+}
+
+/* Downy Woodpecker: black/white checkerboard, small chisel beak, red nape spot */
+.sprite-downy-woodpecker {
+    box-shadow:
+        7px 1px 0 #111, 8px 1px 0 #111, 9px 1px 0 #111, 10px 1px 0 #cc0000, 11px 1px 0 #111,
+        6px 2px 0 #111, 7px 2px 0 #111, 8px 2px 0 #111, 9px 2px 0 #111, 10px 2px 0 #cc0000, 11px 2px 0 #111,
+        5px 3px 0 #111, 6px 3px 0 #eee, 7px 3px 0 #eee, 8px 3px 0 #eee, 9px 3px 0 #eee, 10px 3px 0 #111, 11px 3px 0 #111, 12px 3px 0 #111, 13px 3px 0 #556655, 14px 3px 0 #667766,
+        4px 4px 0 #eee, 5px 4px 0 #fff, 6px 4px 0 #fff, 7px 4px 0 #fff, 8px 4px 0 #eee, 9px 4px 0 #111, 10px 4px 0 #eee, 11px 4px 0 #111, 12px 4px 0 #222, 13px 4px 0 #556655, 14px 4px 0 #667766,
+        3px 5px 0 #ddd, 4px 5px 0 #eee, 5px 5px 0 #fff, 6px 5px 0 #fff, 7px 5px 0 #eee, 8px 5px 0 #111, 9px 5px 0 #eee, 10px 5px 0 #111, 11px 5px 0 #111,
+        3px 6px 0 #111, 4px 6px 0 #eee, 5px 6px 0 #fff, 6px 6px 0 #fff, 7px 6px 0 #eee, 8px 6px 0 #eee, 9px 6px 0 #111, 10px 6px 0 #111,
+        2px 7px 0 #111, 3px 7px 0 #eee, 4px 7px 0 #fff, 5px 7px 0 #eee, 6px 7px 0 #111, 7px 7px 0 #eee, 8px 7px 0 #111, 9px 7px 0 #eee, 10px 7px 0 #111,
+        2px 8px 0 #eee, 3px 8px 0 #fff, 4px 8px 0 #eee, 5px 8px 0 #111, 6px 8px 0 #eee, 7px 8px 0 #111, 8px 8px 0 #eee, 9px 8px 0 #111,
+        1px 9px 0 #111, 2px 9px 0 #eee, 3px 9px 0 #eee, 4px 9px 0 #111, 5px 9px 0 #eee, 6px 9px 0 #111, 7px 9px 0 #eee, 8px 9px 0 #111,
+        1px 10px 0 #111, 2px 10px 0 #111, 3px 10px 0 #eee, 4px 10px 0 #111, 5px 10px 0 #eee, 6px 10px 0 #111, 7px 10px 0 #eee,
+        1px 11px 0 #111, 2px 11px 0 #111, 3px 11px 0 #111, 4px 11px 0 #111, 5px 11px 0 #111, 6px 11px 0 #111,
+        0px 12px 0 #111, 1px 12px 0 #111, 2px 12px 0 #111, 3px 12px 0 #111, 4px 12px 0 #111, 5px 12px 0 #111,
+        0px 13px 0 #222, 1px 13px 0 #111, 2px 13px 0 #111, 3px 13px 0 #111, 4px 13px 0 #222,
+        1px 14px 0 #222, 2px 14px 0 #222, 3px 14px 0 #222, 8px 14px 0 #555, 9px 14px 0 #555,
+        7px 15px 0 #444, 8px 15px 0 #333, 9px 15px 0 #333, 10px 15px 0 #444;
+}
+
+/* Black-capped Chickadee: jet-black cap/bib, bright white cheeks, buff flanks */
+.sprite-black-capped-chickadee {
+    box-shadow:
+        7px 1px 0 #111, 8px 1px 0 #111, 9px 1px 0 #111, 10px 1px 0 #111,
+        6px 2px 0 #111, 7px 2px 0 #111, 8px 2px 0 #111, 9px 2px 0 #111, 10px 2px 0 #111, 11px 2px 0 #111,
+        5px 3px 0 #111, 6px 3px 0 #111, 7px 3px 0 #111, 8px 3px 0 #eee, 9px 3px 0 #fff, 10px 3px 0 #eee, 11px 3px 0 #111, 12px 3px 0 #111, 13px 3px 0 #445544, 14px 3px 0 #556655,
+        4px 4px 0 #111, 5px 4px 0 #111, 6px 4px 0 #eee, 7px 4px 0 #fff, 8px 4px 0 #fff, 9px 4px 0 #fff, 10px 4px 0 #eee, 11px 4px 0 #111, 12px 4px 0 #111, 13px 4px 0 #445544,
+        3px 5px 0 #111, 4px 5px 0 #111, 5px 5px 0 #eee, 6px 5px 0 #fff, 7px 5px 0 #fff, 8px 5px 0 #fff, 9px 5px 0 #fff, 10px 5px 0 #eee, 11px 5px 0 #111, 12px 5px 0 #222,
+        2px 6px 0 #111, 3px 6px 0 #111, 4px 6px 0 #111, 5px 6px 0 #111, 6px 6px 0 #111, 7px 6px 0 #111, 8px 6px 0 #111, 9px 6px 0 #111, 10px 6px 0 #111, 11px 6px 0 #111,
+        2px 7px 0 #778899, 3px 7px 0 #f0f0e0, 4px 7px 0 #f0f0e0, 5px 7px 0 #f0f0e0, 6px 7px 0 #e8e8d0, 7px 7px 0 #9999aa, 8px 7px 0 #888899, 9px 7px 0 #9999aa, 10px 7px 0 #9999aa,
+        2px 8px 0 #778899, 3px 8px 0 #ddbb88, 4px 8px 0 #eedd99, 5px 8px 0 #eedd99, 6px 8px 0 #ddbb88, 7px 8px 0 #9999aa, 8px 8px 0 #888899, 9px 8px 0 #888899, 10px 8px 0 #9999aa,
+        1px 9px 0 #667788, 2px 9px 0 #778899, 3px 9px 0 #cc9966, 4px 9px 0 #ddaa77, 5px 9px 0 #ddaa77, 6px 9px 0 #cc9966, 7px 9px 0 #888899, 8px 9px 0 #888899, 9px 9px 0 #888899,
+        1px 10px 0 #667788, 2px 10px 0 #778899, 3px 10px 0 #cc9966, 4px 10px 0 #cc9966, 5px 10px 0 #bb8855, 6px 10px 0 #778899, 7px 10px 0 #888899, 8px 10px 0 #888899,
+        1px 11px 0 #667788, 2px 11px 0 #778899, 3px 11px 0 #888899, 4px 11px 0 #888899, 5px 11px 0 #888899, 6px 11px 0 #778899, 7px 11px 0 #777788,
+        1px 12px 0 #667788, 2px 12px 0 #778899, 3px 12px 0 #888899, 4px 12px 0 #888899, 5px 12px 0 #778899, 6px 12px 0 #667788,
+        1px 13px 0 #556677, 2px 13px 0 #667788, 3px 13px 0 #778899, 4px 13px 0 #778899, 5px 13px 0 #667788,
+        2px 14px 0 #556677, 3px 14px 0 #667788, 4px 14px 0 #667788, 8px 14px 0 #555, 9px 14px 0 #555,
+        7px 15px 0 #444, 8px 15px 0 #333, 9px 15px 0 #333, 10px 15px 0 #444;
+}
+
+/* Carolina Wren: warm brown, upturned tail, white eyebrow stripe, cream belly */
+.sprite-carolina-wren {
+    box-shadow:
+        /* Upturned tail extends up-left from body */
+        0px 4px 0 #704820, 1px 4px 0 #704820,
+        0px 5px 0 #7a5228, 1px 5px 0 #8b6030, 2px 5px 0 #704820,
+        0px 6px 0 #8b6030, 1px 6px 0 #9a6e38, 2px 6px 0 #8b6030, 3px 6px 0 #704820,
+        1px 7px 0 #9a6e38, 2px 7px 0 #a07840, 3px 7px 0 #8b6030, 4px 7px 0 #704820,
+        /* Head with white eyebrow: brow stripe at y=2 */
+        5px 2px 0 #8b5a2b, 6px 2px 0 #a06838, 7px 2px 0 #eeeecc, 8px 2px 0 #eeeecc, 9px 2px 0 #eeeecc, 10px 2px 0 #ddddb8, 11px 2px 0 #8b5a2b,
+        5px 3px 0 #8b5a2b, 6px 3px 0 #9a6838, 7px 3px 0 #b07840, 8px 3px 0 #c08848, 9px 3px 0 #b07840, 10px 3px 0 #9a6838, 11px 3px 0 #8b5a2b, 12px 3px 0 #704820, 13px 3px 0 #664422, 14px 3px 0 #775533,
+        4px 4px 0 #8b5a2b, 5px 4px 0 #a06838, 6px 4px 0 #b07840, 7px 4px 0 #c08848, 8px 4px 0 #c08848, 9px 4px 0 #c08848, 10px 4px 0 #b07840, 11px 4px 0 #9a6838, 12px 4px 0 #222, 13px 4px 0 #664422, 14px 4px 0 #775533,
+        3px 5px 0 #7a5228, 4px 5px 0 #8b5a2b, 5px 5px 0 #a06838, 6px 5px 0 #b07840, 7px 5px 0 #b07840, 8px 5px 0 #c08848, 9px 5px 0 #b07840, 10px 5px 0 #9a6838, 11px 5px 0 #8b5a2b,
+        /* Body with cream belly */
+        2px 8px 0 #7a5228, 3px 8px 0 #8b5a2b, 4px 8px 0 #9a6838, 5px 8px 0 #a06838, 6px 8px 0 #ddddb8, 7px 8px 0 #ddddb8, 8px 8px 0 #ddddb8, 9px 8px 0 #a06838, 10px 8px 0 #9a6838, 11px 8px 0 #8b5a2b,
+        2px 9px 0 #7a5228, 3px 9px 0 #8b5a2b, 4px 9px 0 #9a6838, 5px 9px 0 #eeeecc, 6px 9px 0 #ddddb8, 7px 9px 0 #ddddb8, 8px 9px 0 #ddddb8, 9px 9px 0 #9a6838, 10px 9px 0 #8b5a2b,
+        2px 10px 0 #6b4820, 3px 10px 0 #7a5228, 4px 10px 0 #8b5a2b, 5px 10px 0 #9a6838, 6px 10px 0 #a06838, 7px 10px 0 #9a6838, 8px 10px 0 #8b5a2b, 9px 10px 0 #7a5228,
+        2px 11px 0 #6b4820, 3px 11px 0 #7a5228, 4px 11px 0 #8b5a2b, 5px 11px 0 #8b5a2b, 6px 11px 0 #7a5228, 7px 11px 0 #6b4820,
+        2px 12px 0 #5c3c18, 3px 12px 0 #6b4820, 4px 12px 0 #7a5228, 5px 12px 0 #7a5228, 6px 12px 0 #6b4820,
+        3px 13px 0 #5c3c18, 4px 13px 0 #6b4820, 5px 13px 0 #6b4820,
+        4px 14px 0 #4c2c10, 5px 14px 0 #5c3c18, 8px 14px 0 #555, 9px 14px 0 #555,
+        7px 15px 0 #444, 8px 15px 0 #333, 9px 15px 0 #333, 10px 15px 0 #444;
+}
+

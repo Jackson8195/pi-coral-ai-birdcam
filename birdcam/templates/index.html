@@ -4,25 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bird Detections</title>
-    <style>
-        table {
-            width: 50%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
 </head>
 <body>
     <h2>Bird Detection Summary</h2>
-    <button onclick="shutdown()">Shutdown</button>
-    <button id="huePauseBtn" onclick="toggleHuePause()">Pause Hue Lights</button>
+    <div class="btn-row">
+        <a href="/training" class="neon-btn neon-btn-accent">Training Labels</a>
+        <button class="neon-btn neon-btn-danger" onclick="shutdown()">Shutdown</button>
+        <button class="neon-btn" id="huePauseBtn" onclick="toggleHuePause()">Pause Hue Lights</button>
+    </div>
     <script>
         function shutdown() {
             if (confirm("Are you sure you want to shut down the Raspberry Pi?")) {
@@ -45,7 +35,7 @@
                 body: JSON.stringify({ paused: paused })
             }).then(response => {
                 if (response.ok) {
-                    updateHuePauseButton(); // Always update from server
+                    updateHuePauseButton();
                 }
             });
         }
@@ -57,23 +47,75 @@
                     btn.textContent = data.paused ? 'Resume Hue Lights' : 'Pause Hue Lights';
                 });
         }
-        window.onload = updateHuePauseButton;
+        let lastTotal = null;
+        function updateStats() {
+            fetch('/api/stats')
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('statTotal').textContent = data.total_today;
+                    document.getElementById('statSpecies').textContent = data.species_today;
+                    document.getElementById('statTopBird').textContent =
+                        data.most_frequent ? data.most_frequent + ' (' + data.most_frequent_count + ')' : '--';
+                    document.getElementById('statLastTime').textContent =
+                        data.last_detection ? data.last_detection.slice(11) : '--';
+                    if (lastTotal !== null && data.total_today > lastTotal) {
+                        document.querySelectorAll('.bird-sprite').forEach(function(el) {
+                            el.classList.remove('hop');
+                            void el.offsetWidth;
+                            el.classList.add('hop');
+                            el.addEventListener('animationend', function() { el.classList.remove('hop'); }, { once: true });
+                        });
+                    }
+                    lastTotal = data.total_today;
+                })
+                .catch(function() {});
+        }
+        window.onload = function() {
+            updateHuePauseButton();
+            updateStats();
+        };
+        setInterval(updateStats, 30000);
     </script>
-    <table>
-        <tr>
-            <th>Bird Species</th>
-            <th>Total Detections</th>
-            <th>Images</th>
-        </tr>
+    <div class="stats-bar" id="statsBar">
+        <div class="stat-card">
+            <div class="stat-value" id="statTotal">--</div>
+            <div class="stat-label">Today's Visits</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="statSpecies">--</div>
+            <div class="stat-label">Species Seen</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value stat-value-sm" id="statTopBird">--</div>
+            <div class="stat-label">Top Visitor</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value stat-value-sm" id="statLastTime">--</div>
+            <div class="stat-label">Last Seen</div>
+        </div>
+    </div>
+    <table class="neon-table">
+        <thead>
+            <tr>
+                <th>Bird Species</th>
+                <th>Total Detections</th>
+                <th>Images</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for bird, count in bird_counts.items() %}
-        <tr>
-            <td>{{ bird }}</td>
+        <tr class="color-{{ bird|lower|replace(' ', '-') }}">
+            <td>
+                <span class="sprite-wrap"><i class="bird-sprite sprite-unknown sprite-{{ bird|lower|replace(' ', '-') }}"></i></span>
+                {{ bird }}
+            </td>
             <td>{{ count }}</td>
             <td>
                 <a href="/bird/{{ bird }}" target="_blank">View Images</a>
             </td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>
 </body>
 </html>

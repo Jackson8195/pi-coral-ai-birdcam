@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Training data images (keep folder structure, ignore image/annotation files)
+birdcam/training_data/**/*.png
+birdcam/training_data/**/*.jpg
+birdcam/training_data/**/*.jpeg
+birdcam/training_data/**/*.json

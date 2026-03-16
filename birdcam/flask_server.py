@@ -3,7 +3,10 @@ import threading
 import logging
 import os
 import time
+import json
+import shutil
 from collections import defaultdict
+from datetime import date
 
 app = Flask(__name__)
 
@@ -82,6 +85,43 @@ def serve_image(filename):
 def get_bird_data():
     return jsonify(parse_log())
 
+@app.route('/api/stats')
+def get_stats():
+    log_file_path = current_app.config.get('LOG_FILE_PATH', '')
+    today_str = date.today().strftime('%Y-%m-%d')
+    today_counts = defaultdict(int)
+    last_detection = None
+
+    if log_file_path:
+        try:
+            with open(log_file_path, 'r') as f:
+                for line in f:
+                    if 'Results:' not in line:
+                        continue
+                    if not line.startswith(today_str):
+                        continue
+                    bird = line.split('Results:')[-1].strip()
+                    today_counts[bird] += 1
+                    try:
+                        last_detection = line[:19]
+                    except Exception:
+                        pass
+        except IOError:
+            pass
+
+    total = sum(today_counts.values())
+    species_count = len(today_counts)
+    most_frequent = max(today_counts, key=today_counts.get) if today_counts else None
+    most_frequent_count = today_counts[most_frequent] if most_frequent else 0
+
+    return jsonify({
+        'total_today': total,
+        'species_today': species_count,
+        'most_frequent': most_frequent,
+        'most_frequent_count': most_frequent_count,
+        'last_detection': last_detection
+    })
+
 import threading
 
 @app.route('/shutdown', methods=['POST'])
@@ -114,6 +154,168 @@ def get_hue_pause():
 def is_hue_lights_paused():
     global hue_lights_paused
     return hue_lights_paused
+
+TRAINING_DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'training_data')
+
+
+def get_labeled_filenames():
+    """Return set of filenames that have already been labeled in training_data/."""
+    labeled = set()
+    if not os.path.isdir(TRAINING_DATA_DIR):
+        return labeled
+    for bird_dir in os.listdir(TRAINING_DATA_DIR):
+        bird_path = os.path.join(TRAINING_DATA_DIR, bird_dir)
+        if not os.path.isdir(bird_path):
+            continue
+        for id_type in ('PositiveID', 'NegativeID'):
+            id_path = os.path.join(bird_path, id_type)
+            if os.path.isdir(id_path):
+                for f in os.listdir(id_path):
+                    if f.endswith(('.png', '.jpg', '.jpeg')):
+                        labeled.add(f)
+    return labeled
+
+
+def get_training_counts():
+    """Return dict of {bird: {positive: N, negative: N}} from training_data folder."""
+    counts = {}
+    if not os.path.isdir(TRAINING_DATA_DIR):
+        return counts
+    for bird_dir in sorted(os.listdir(TRAINING_DATA_DIR)):
+        bird_path = os.path.join(TRAINING_DATA_DIR, bird_dir)
+        if not os.path.isdir(bird_path):
+            continue
+        pos_dir = os.path.join(bird_path, 'PositiveID')
+        neg_dir = os.path.join(bird_path, 'NegativeID')
+        pos = len([f for f in os.listdir(pos_dir) if f.endswith(('.png', '.jpg', '.jpeg'))]) if os.path.isdir(pos_dir) else 0
+        neg = len([f for f in os.listdir(neg_dir) if f.endswith(('.png', '.jpg', '.jpeg'))]) if os.path.isdir(neg_dir) else 0
+        if pos > 0 or neg > 0:
+            counts[bird_dir] = {'positive': pos, 'negative': neg}
+    return counts
+
+
+def load_labels():
+    """Load bird labels from the model label file."""
+    labels_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'models', 'inat_bird_labels.txt')
+    labels = []
+    with open(labels_path, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.endswith('background'):
+                continue
+            # Format: "68 Cardinalis cardinalis (Northern Cardinal)"
+            # Extract the friendly name from parentheses
+            if '(' in line and ')' in line:
+                common = line[line.index('(') + 1:line.index(')')]
+                scientific = line.split(' ', 1)[1].split('(')[0].strip()
+                labels.append({'common': common, 'scientific': scientific})
+    return labels
+
+
+@app.route('/training')
+def training_dashboard():
+    counts = get_training_counts()
+    storage_folder = current_app.config.get('STORAGE_PATH', '')
+    # Get list of bird species with images in current run
+    bird_species = []
+    if storage_folder and os.path.isdir(storage_folder):
+        bird_counts = parse_log()
+        bird_species = list(bird_counts.keys())
+    return render_template('training.html', training_counts=counts, bird_species=bird_species)
+
+
+@app.route('/training/images/<bird>')
+def training_bird_images(bird):
+    """Show images from current run for a specific bird, ready for labeling."""
+    storage_folder = current_app.config.get('STORAGE_PATH', '')
+    if not storage_folder or not os.path.isdir(storage_folder):
+        return "No storage folder found.", 404
+    all_files = os.listdir(storage_folder)
+    search_term = bird.lower()
+    images = [f for f in all_files if search_term in f.lower() and f.endswith(('.png', '.jpg', '.jpeg'))]
+    labeled = get_labeled_filenames()
+    return render_template('training_select.html', bird=bird, images=images, labeled=labeled)
+
+
+def extract_bird_name(filename):
+    """Extract bird name from filename like 'img-NorthernCardinal0012345678.png'."""
+    import re
+    name = os.path.splitext(filename)[0]  # strip extension
+    name = re.sub(r'^img-', '', name)      # strip img- prefix
+    name = re.sub(r'\d{10,}$', '', name)   # strip trailing timestamp digits
+    # Insert spaces before uppercase letters (PascalCase -> spaced)
+    name = re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', name)
+    name = re.sub(r'(?<=[A-Z])(?=[A-Z][a-z])', ' ', name)
+    return name.strip() if name.strip() else None
+
+
+@app.route('/training/label/<filename>')
+def training_label_image(filename):
+    """Show the labeling interface for a specific image."""
+    is_labeled = filename in get_labeled_filenames()
+    detected_bird = extract_bird_name(filename)
+    return render_template('training_label.html', filename=filename,
+                           is_labeled=is_labeled, detected_bird=detected_bird or '')
+
+
+@app.route('/api/training/labels')
+def api_training_labels():
+    """Return all bird labels for autocomplete."""
+    return jsonify(load_labels())
+
+
+@app.route('/api/training/save', methods=['POST'])
+def api_training_save():
+    """Save a labeled training image with bounding box annotation."""
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+
+    filename = data.get('filename')
+    label = data.get('label')
+    bbox = data.get('bbox')  # {x, y, width, height} as ratios 0-1
+    correct_id = data.get('correct_id', True)
+
+    if not all([filename, label, bbox]):
+        return jsonify({'error': 'Missing required fields: filename, label, bbox'}), 400
+
+    storage_folder = current_app.config.get('STORAGE_PATH', '')
+    src_path = os.path.join(storage_folder, filename)
+    if not os.path.isfile(src_path):
+        return jsonify({'error': f'Source image not found: {filename}'}), 404
+
+    # Sanitize label for folder name
+    safe_label = label.replace('/', '-').replace('\\', '-')
+    id_folder = 'PositiveID' if correct_id else 'NegativeID'
+    dest_dir = os.path.join(TRAINING_DATA_DIR, safe_label, id_folder)
+    os.makedirs(dest_dir, exist_ok=True)
+
+    # Copy image
+    dest_path = os.path.join(dest_dir, filename)
+    shutil.copy2(src_path, dest_path)
+
+    # Save annotation alongside image
+    annotation = {
+        'filename': filename,
+        'label': label,
+        'correct_id': correct_id,
+        'bbox': bbox
+    }
+    annotation_path = os.path.splitext(dest_path)[0] + '.json'
+    with open(annotation_path, 'w') as f:
+        json.dump(annotation, f, indent=2)
+
+    return jsonify({'status': 'ok', 'saved_to': dest_path})
+
+
+@app.route('/training/data/<bird>/<id_type>/<filename>')
+def serve_training_image(bird, id_type, filename):
+    """Serve images from the training data folder."""
+    img_dir = os.path.join(TRAINING_DATA_DIR, bird, id_type)
+    if os.path.isfile(os.path.join(img_dir, filename)):
+        return send_from_directory(img_dir, filename)
+    return "Image not found", 404
+
 
 def run_flask():
     print("Starting Flask server...")

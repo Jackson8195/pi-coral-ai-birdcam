@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Image - {{ bird }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+</head>
+<body>
+    <a href="/training" class="neon-link">&larr; Back to Training</a>
+    <h2>
+        <span class="sprite-wrap"><i class="bird-sprite sprite-unknown sprite-{{ bird|lower|replace(' ', '-') }}"></i></span>
+        {{ bird }} &mdash; Tap image to label
+    </h2>
+
+    {% if images %}
+    <div class="thumb-gallery">
+        {% for image in images %}
+        <a href="/training/label/{{ image }}" class="thumb{% if image in labeled %} labeled{% endif %}">
+            <img src="/images/{{ image }}" alt="{{ image }}" loading="lazy">
+            <span class="thumb-label">{{ image }}</span>
+            {% if image in labeled %}<span class="check-overlay">&#10003;</span>{% endif %}
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">No images found for {{ bird }}.</p>
+    {% endif %}
+</body>
+</html>
