@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify, current_app, send_from_direct
 import threading
 import logging
 import os
+import re
 import time
 import json
 import shutil
@@ -9,6 +10,11 @@ from collections import defaultdict
 from datetime import date
 
 app = Flask(__name__)
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
 
 # Set Flask to log to its own file
 def configure_logging():
@@ -84,6 +90,28 @@ def serve_image(filename):
 @app.route('/api/bird_counts_raw')
 def get_bird_data():
     return jsonify(parse_log())
+
+@app.route('/api/latest_image')
+def get_latest_image():
+    storage_folder = current_app.config.get('STORAGE_PATH', '')
+    bird_filters = request.args.getlist('birds[]')
+
+    files = [f for f in os.listdir(storage_folder)
+             if f.startswith('img-') and f.endswith(('.png', '.jpg', '.jpeg'))]
+
+    if bird_filters:
+        files = [f for f in files
+                 if any(bf.lower().replace(' ', '') in f.lower() for bf in bird_filters)]
+
+    if not files:
+        return jsonify({'filename': None, 'bird': None}), 404
+
+    def ts(name):
+        m = re.search(r'(\d{10,})\.', name)
+        return int(m.group(1)) if m else 0
+
+    latest = max(files, key=ts)
+    return jsonify({'filename': latest, 'bird': extract_bird_name(latest)})
 
 @app.route('/api/stats')
 def get_stats():
@@ -239,7 +267,6 @@ def training_bird_images(bird):
 
 def extract_bird_name(filename):
     """Extract bird name from filename like 'img-NorthernCardinal0012345678.png'."""
-    import re
     name = os.path.splitext(filename)[0]  # strip extension
     name = re.sub(r'^img-', '', name)      # strip img- prefix
     name = re.sub(r'\d{10,}$', '', name)   # strip trailing timestamp digits
