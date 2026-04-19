@@ -101,7 +101,7 @@ def get_latest_image():
 
     if bird_filters:
         files = [f for f in files
-                 if any(bf.lower().replace(' ', '') in f.lower() for bf in bird_filters)]
+                 if any(bf.lower().replace(' ', '') in f.lower().replace(' ', '') for bf in bird_filters)]
 
     if not files:
         return jsonify({'filename': None, 'bird': None}), 404
