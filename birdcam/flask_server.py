@@ -34,14 +34,14 @@ def parse_log():
     bird_counts = defaultdict(int)
     # Get the bird log txt file path from config in bird_classify
     log_file_path = current_app.config.get('LOG_FILE_PATH', '')
-   
+
     if not log_file_path:
         return bird_counts  # No log file path set
     try:
         with open(log_file_path, 'r') as file:
             for line in file:
                 if "Results:" in line:
-                    bird = line.split("Results:")[-1].strip()
+                    bird = line.split("Results:")[-1].split("Score:")[0].strip()
                     bird_counts[bird] += 1
     except IOError:
         print("Error reading log file.")
@@ -132,7 +132,7 @@ def get_stats():
                         continue
                     if not line.startswith(today_str):
                         continue
-                    bird = line.split('Results:')[-1].strip()
+                    bird = line.split('Results:')[-1].split('Score:')[0].strip()
                     today_counts[bird] += 1
                     try:
                         last_detection = line[:19]
