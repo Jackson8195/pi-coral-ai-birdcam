@@ -55,14 +55,15 @@ b = Bridge('192.168.0.156')
 b.connect()
 
 
-def save_data(image, results, path, ext='png'):
+def save_data(image, results, path, score=0.0, ext='png'):
     """Saves camera frame and model inference results
     to user-defined storage directory."""
-    tag = results + '%010d' % int(time.monotonic()*1000)
+    score_int = min(99, int(score * 100))
+    tag = '%s_%02d_%010d' % (results, score_int, int(time.monotonic()*1000))
     name = '%s/img-%s.%s' % (path, tag, ext)
     image.save(name)
     print('Frame saved as: %s' % name)
-    logging.info('Image: %s Results: %s', tag, results)
+    logging.info('Image: %s Results: %s Score: %.2f', tag, results, score)
 
 
 def print_results(start_time, last_time, end_time, results):
@@ -245,7 +246,7 @@ def main():
                         print("Visitor: ", visitor)
                         print("Score: ", results[0][1])
                         print("Visited at: ", formatted_time)
-                        save_data(image, friendly_birdname, storage_dir)
+                        save_data(image, friendly_birdname, storage_dir, score=results[0][1])
                         mongodb.mongo_insert(visitor, results[0][1], formatted_time)
                         visitors.append(visitor)
             #run light switchback logic again if no results are being detected at all at the feeder

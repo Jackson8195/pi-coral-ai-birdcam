@@ -91,8 +91,8 @@ def serve_image(filename):
 def get_bird_data():
     return jsonify(parse_log())
 
-@app.route('/api/latest_image')
-def get_latest_image():
+@app.route('/api/best_image')
+def get_best_image():
     storage_folder = current_app.config.get('STORAGE_PATH', '')
     bird_filters = request.args.getlist('birds[]')
 
@@ -106,12 +106,16 @@ def get_latest_image():
     if not files:
         return jsonify({'filename': None, 'bird': None}), 404
 
-    def ts(name):
-        m = re.search(r'(\d{10,})\.', name)
-        return int(m.group(1)) if m else 0
+    def score_ts(name):
+        m = re.search(r'_(\d{2})_(\d{10,})\.', name)
+        if m:
+            return (int(m.group(1)), int(m.group(2)))
+        # old filename format — fall back to timestamp only, score 0
+        m2 = re.search(r'(\d{10,})\.', name)
+        return (0, int(m2.group(1)) if m2 else 0)
 
-    latest = max(files, key=ts)
-    return jsonify({'filename': latest, 'bird': extract_bird_name(latest)})
+    best = max(files, key=score_ts)
+    return jsonify({'filename': best, 'bird': extract_bird_name(best)})
 
 @app.route('/api/stats')
 def get_stats():
@@ -266,10 +270,11 @@ def training_bird_images(bird):
 
 
 def extract_bird_name(filename):
-    """Extract bird name from filename like 'img-NorthernCardinal0012345678.png'."""
+    """Extract bird name from filename like 'img-NorthernCardinal_87_0012345678.png'."""
     name = os.path.splitext(filename)[0]  # strip extension
     name = re.sub(r'^img-', '', name)      # strip img- prefix
-    name = re.sub(r'\d{10,}$', '', name)   # strip trailing timestamp digits
+    name = re.sub(r'_\d{2}_\d{10,}$', '', name)  # strip _score_timestamp (new format)
+    name = re.sub(r'\d{10,}$', '', name)   # strip bare timestamp (old format)
     # Insert spaces before uppercase letters (PascalCase -> spaced)
     name = re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', name)
     name = re.sub(r'(?<=[A-Z])(?=[A-Z][a-z])', ' ', name)
