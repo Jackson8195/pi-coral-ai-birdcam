@@ -117,6 +117,19 @@ def get_best_image():
     best = max(files, key=score_ts)
     return jsonify({'filename': best, 'bird': extract_bird_name(best)})
 
+@app.route('/api/images')
+def get_images_for_bird():
+    storage_folder = current_app.config.get('STORAGE_PATH', '')
+    bird = request.args.get('bird', '')
+    if not storage_folder or not os.path.isdir(storage_folder):
+        return jsonify([])
+    search_term = bird.lower().replace(' ', '')
+    files = [f for f in os.listdir(storage_folder)
+             if f.startswith('img-') and f.lower().endswith(('.png', '.jpg', '.jpeg'))
+             and search_term in f.lower().replace(' ', '')]
+    return jsonify(sorted(files))
+
+
 @app.route('/api/stats')
 def get_stats():
     log_file_path = current_app.config.get('LOG_FILE_PATH', '')
