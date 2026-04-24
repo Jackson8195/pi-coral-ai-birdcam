@@ -117,6 +117,32 @@ def get_best_image():
     best = max(files, key=score_ts)
     return jsonify({'filename': best, 'bird': extract_bird_name(best)})
 
+@app.route('/api/latest_image')
+def get_latest_image():
+    storage_folder = current_app.config.get('STORAGE_PATH', '')
+    bird_filters = request.args.getlist('birds[]')
+
+    files = [f for f in os.listdir(storage_folder)
+             if f.startswith('img-') and f.endswith(('.png', '.jpg', '.jpeg'))]
+
+    if bird_filters:
+        files = [f for f in files
+                 if any(bf.lower().replace(' ', '') in f.lower().replace(' ', '') for bf in bird_filters)]
+
+    if not files:
+        return jsonify({'filename': None, 'bird': None}), 404
+
+    def ts_only(name):
+        m = re.search(r'_(\d{2})_(\d{10,})\.', name)
+        if m:
+            return int(m.group(2))
+        m2 = re.search(r'(\d{10,})\.', name)
+        return int(m2.group(1)) if m2 else 0
+
+    latest = max(files, key=ts_only)
+    return jsonify({'filename': latest, 'bird': extract_bird_name(latest)})
+
+
 @app.route('/api/images')
 def get_images_for_bird():
     storage_folder = current_app.config.get('STORAGE_PATH', '')
